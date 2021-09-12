@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet"  href="/style.css">
+</head>
+
+    <body>
+        <div th:insert="fragments/navbar.html"> </div>
+        <br>
+
+        <div style="margin-left: 3%">
+
+            <div th:if="${!isLoggedIn}">
+                <form th:action="@{/login}" method="post">
+
+                    <div><label class="login-label"> User Name: <input type="text" name="username"/> </label></div>
+                    <div><label class="login-label"> Password: <input type="password" name="password"/> </label></div>
+                    <br>
+                    <div><input type="submit" value="Sign In"/></div>
+
+                </form>
+                <p>for demo: <strong>User = user, Password = user</strong></p>
+
+            </div>
+
+            <div th:if="${isLoggedIn}">
+                <p>Logged in</p>
+                <form name="logoutForm" th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out" />
+                </form>
+            </div>
+
+        </div>
+    </body>
+
+</html>

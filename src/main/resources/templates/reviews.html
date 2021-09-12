@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Reviews</title>
+    <link rel="stylesheet"  href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div th:insert="fragments/navbar.html"> </div>
+
+    <h2>Reviews</h2>
+
+    <div class="add-post-form">
+        <div>
+            <form  th:action="@{/reviews}" method="post">
+                <input class="side-button" type="submit" value="add review" name="add-review" />
+            </form>
+        </div>
+
+    </div>
+
+    <span th:if="${showReviewForm}" style="margin-right: 5%; float: right; padding: 5px; clear: both">
+        <span th:insert="fragments/new_review_form.html"></span>
+    </span>
+    <p th:if="${errors} != null" th:text="${errors}"></p>
+
+
+    <div class="posts-container">
+        <div style="max-height: unset;">
+
+            <div th:each="i: ${#numbers.sequence(reviews.size() - 1, 0, -1)}" class="article">
+                <h3 th:text="${reviews[i].headline}" style="margin: 0;"></h3>
+                <p th:text="${reviews[i].dateCreated + ', ' + reviews[i].customer?.firstName}" style="font-size: 14px;color: gray;"></p>
+                <p th:text="${reviews[i].stars + ' stars '}" style="display: inline-block; margin: 0; margin-inline-end: 4px">
+                <p th:each="i: ${#numbers.sequence(reviews[i].stars - 1, 0, -1)}" style="display: inline-block; margin: 0">
+                    <span class="fa fa-star checked"></span>
+                </p>
+
+                <p th:text="${reviews[i].text}" style="font-size: 14px; white-space: pre-line"></p>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

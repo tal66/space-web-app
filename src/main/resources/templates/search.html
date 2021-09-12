@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet"  href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div th:insert="fragments/navbar.html"> </div>
+
+    <h2>Search</h2>
+
+    <div style="margin-left: 3%">
+
+        <span th:if="${searchDestForm}">
+            <h4>Search Destination By Numbers:</h4>
+
+            <form action="#" th:action="@{/search}" th:object="${searchDestForm}" method="POST">
+
+                <select style="width: auto;" class="search-bar" th:field="*{selectedOption}">
+                    <option th:each="opt: ${searchDestForm.options}" th:value="${opt.value}" th:text="${opt.text}" ></option>
+                </select>
+
+                <span style="font-size: 20px;">  >  </span>
+
+                <input th:field="*{userText}" class="search-bar" type="text" placeholder="Number..">
+    <!--            <input type="hidden" th:field="*{options}" th:value="${searchForm.options}"/>-->
+                <button name="search-dest" class="search-button" type="submit"><i class="fa fa-search"></i></button>
+            </form>
+
+
+            <span th:if="${errorMessage != null}">
+                <p style="font-weight: bold" th:text="${errorMessage}"></p>
+            </span>
+        </span>
+
+        <span th:if="${destResults != null}">
+            <h4>Results:</h4>
+
+            <span th:if="${!destResults.isEmpty()}">
+                <table>
+                        <tr th:each="dest: ${destResults}">
+<!--                            <tr>-->
+                                <td><a th:href="@{${'/destination/' + dest.name}}" th:text="${dest.name}"></a></td>
+                                <td th:with="num = ${dest.__(${searchForm.selectedOption})__}">
+                                    <span th:if="${num > 999}" th:text="': ' + ${#numbers.formatInteger(dest.__(${searchForm.selectedOption})__,3,'COMMA')}"></span>
+                                    <span th:if="${num < 1000}" th:utext="${num}"></span>
+                                </td>
+<!--                            </tr>-->
+                        </tr>
+                </table>
+            </span>
+
+            <span th:if="${destResults.isEmpty()}">
+                <p>0 results.</p>
+            </span>
+
+        </span>
+
+
+        <span th:if="${searchTripForm}">
+            <h4>Search Trips By Dates:</h4>
+            <form action="#" th:action="@{/search}" th:object="${searchTripForm}" method="POST">
+
+                <span>From:<input th:field="*{date1}" type="date" class="search-bar" style="width: unset"></span>
+                <span>To:<input th:field="*{date2}" type="date" class="search-bar" style="width: unset"></span>
+
+                <button name="search-trip" class="search-button" type="submit"><i class="fa fa-search"></i></button>
+            </form>
+
+            <span th:if="${errorMessage != null}">
+                <p style="font-weight: bold" th:text="${errorMessage}"></p>
+            </span>
+        </span>
+
+
+        <span th:if="${tripResults != null}">
+            <h4>Results:</h4>
+
+            <span th:if="${!tripResults.isEmpty()}">
+                <table style="width: 33%;">
+                    <tr>
+                        <th>Date</th>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+                    <tr th:each="trip: ${tripResults}">
+                        <td th:text="${trip.date}"></td>
+                        <td th:text="${trip.from.name}"></td>
+                        <td th:text="${trip.to.name}"></td>
+                    </tr>
+                </table>
+            </span>
+
+            <span th:if="${tripResults.isEmpty()}">
+                <p>0 results.</p>
+            </span>
+
+        </span>
+    </div>
+
+</body>
+</html>

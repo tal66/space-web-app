@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Vacation</title>
+    <link rel="stylesheet"  href="/style.css">
+</head>
+
+<body>
+    <div th:insert="fragments/navbar.html"> </div>
+
+    <h2>Our Top Destinations:</h2>
+
+    <div style="margin-left: 3%">
+
+        <span th:each="destinationType: ${destinationsByTypeMap}">
+            <div style="clear: both;"></div>
+            <span th:if="${!destinationType.value.isEmpty()}">
+
+                <p th:text="${destinationType.key} + 's:'"></p>
+                <span th:each="dest: ${destinationType.value}">
+
+                    <div class="polaroid">
+                    <img th:src="@{${'/img/' + dest.mainPic}}">
+                        <div class="container">
+                            <p th:text="${dest.name}"></p>
+                        </div>
+                        <div class="middle">
+                            <a th:href="@{${'/destination/' + dest.name}}"><button class="button-text">Book Now!</button></a>
+                        </div>
+                    </div>
+                </span>
+
+                <br>
+            </span>
+        </span>
+
+
+    </div>
+    <br>
+    <br>
+</body>
+</html>

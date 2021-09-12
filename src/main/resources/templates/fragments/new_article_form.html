@@ -1,0 +1,11 @@
+<form style="" action="#" th:action="@{/news}" th:object="${newArticle}" method="POST" >
+    <p><strong>Headline:</strong><br>
+        <input type="text" th:field="*{headline}" style="width: 100%">
+    </p>
+
+    <p><strong>Text:</strong><br>
+        <textarea th:field="*{text}" style="width: 100%" rows="6"></textarea>
+    </p>
+
+    <button type="submit" name="submit-news">submit</button>
+</form>

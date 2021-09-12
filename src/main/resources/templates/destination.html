@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Space Vacation</title>
+    <link rel="stylesheet"  href="/style.css">
+</head>
+
+<body>
+    <div th:insert="fragments/navbar.html"> </div>
+
+
+    <h2 style="display: inline-block;" th:text=${destination.name}></h2>
+
+    <div style="margin-left: 3%">
+
+        <div class="polaroid" style="float: right; width: 35%">
+            <img style="max-height: unset;" th:src="@{${'/img/' + destination.mainPic}}">
+        </div>
+
+        <div style="float: left; max-width: 50%;">
+            <p th:text="'Radius: ' + ${#numbers.formatInteger(destination.radius_km,3,'COMMA')} + ' (km)'"></p>
+            <p th:text="'Average Orbit Distance: ' + ${#numbers.formatInteger(destination.avgOrbitDistance_km,3,'COMMA')} + ' (km)' "></p>
+            <p th:text="'Orbit Time: ' + ${destination.orbitPeriod_earthYears} + ' (earth years)'"></p>
+            <p class="fact" th:text="${destination.factToDisplay}"></p>
+        </div>
+
+
+        <h2 style="clear: left;">Book your trip:</h2>
+
+            <form style="margin-left: 1%;" action="#" th:action="@{/booking}" th:object="${ticket}" method="POST" >
+
+            <p><strong>Select Date:</strong>
+            <select th:field="*{trip}">
+                <option th:each="t: ${trips}" th:value="${t.tripId}" th:text="${t.date}" >date option</option>
+            </select>
+            </p>
+
+            <p><strong>Select Class:</strong>
+            <select th:field="*{ticketClass}">
+                <option th:each="c: ${classOptions}" th:value="${c}" th:text="${c}" >class option</option>
+            </select>
+
+            </p>
+
+            <br>
+            <button class="book-button" type="submit" name="save-booking">Book</button>
+                <p><a th:href="@{/login}">Login</a> before booking </p>
+        </form>
+
+<br>
+<br>
+
+</div>
+</body>
+
+</html>

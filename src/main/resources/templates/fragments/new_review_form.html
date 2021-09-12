@@ -1,0 +1,16 @@
+
+<form style="" action="#" th:action="@{/reviews}" th:object="${newReview}" method="POST" >
+    <p><strong>Headline:</strong><br>
+        <input type="text" th:field="*{headline}" maxlength="30">
+    </p>
+
+    <p><strong>Text:</strong><br>
+        <textarea th:field="*{text}" maxlength="400"></textarea>
+    </p>
+
+    <p><strong>Stars 1-5:</strong><br>
+        <input type="text" th:field="*{stars}">
+    </p>
+
+    <button type="submit" name="submit-review">submit</button>
+</form>

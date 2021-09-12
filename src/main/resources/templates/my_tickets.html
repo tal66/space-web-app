@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Tickets</title>
+    <link rel="stylesheet"  href="/style.css">
+</head>
+
+<body>
+    <div th:insert="fragments/navbar.html"> </div>
+
+    <h2>My Tickets</h2>
+    <div th:if="${tickets == null or tickets.isEmpty()}">No tickets found. Choose a destination from the homepage</div>
+    <div style="margin-left: 3%">
+        <div th:each="ticket: ${tickets}" th:insert="fragments/ticket.html"> </div>
+    </div>
+</body>
+
+</html>
