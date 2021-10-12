@@ -5,9 +5,10 @@ import mt.spacewebapp.data.DestinationRepository;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.forms.Option;
 import mt.spacewebapp.models.forms.SearchForm;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +21,7 @@ public class DestinationService {
 
     private DestinationRepository destinationRepository;
     private List<Destination> allDestinations;
+    private Map<String, List<Destination>> DestinationsByType;
     private LocalDateTime timeStamp;
 
     public DestinationService(DestinationRepository destinationRepository) {
@@ -36,7 +38,6 @@ public class DestinationService {
     }
 
     private List<Destination> destinationsWithFieldGreaterThan(Double num, String field){
-        updateCache();
         Method getter = fieldToGetter(field);
         List<Destination> result = allDestinations.stream()
                 .filter(dest -> invokeMethod(getter, dest) > num)
@@ -77,38 +78,35 @@ public class DestinationService {
                 new Option("avgOrbitDistance_km", "Average Orbit Distance (km)"));
     }
 
-    @Cacheable("destinations")
+
     public Map<String, List<Destination>> DestinationsByTypeMap(){
-        updateCache();
-        log.info("preparing destinations by type map");
-        Map<String, List<Destination>> result = allDestinations.stream()
-                .collect(Collectors.groupingBy(d -> d.getType().toString()));
-        return result;
+        return this.DestinationsByType;
     }
+
 
     public Destination findByName(String name){
         return destinationRepository.findByName(name);
     }
 
-    @Cacheable("destinations") // only for outside calls
+
     public List<Destination> findAll(){
         log.info("finding all destinations");
         return destinationRepository.findAll();
     }
 
-
-    private boolean updateCache(){
-        if (!cacheIsUpdated()){
-            this.allDestinations = this.findAll();
-            this.timeStamp = LocalDateTime.now();
-            return true;
-        }
-        return false;
+    @PostConstruct
+    @Scheduled(fixedRate = 1000 * 60 * 15)
+    private void updateDestinationsMemberVariables(){
+        this.allDestinations = this.findAll();
+        log.info("update allDestinations: " + this.allDestinations.size() + " destinations");
+        this.DestinationsByType= allDestinations.stream()
+                .collect(Collectors.groupingBy(d -> d.getType().toString()));
+        this.timeStamp = LocalDateTime.now();
     }
 
-    private boolean cacheIsUpdated(){
+    private boolean isCacheUpdated(int minutes){
         return (this.allDestinations != null
-                && LocalDateTime.now().minusMinutes(5).compareTo(this.timeStamp) < 0);
+                && LocalDateTime.now().minusMinutes(minutes).compareTo(this.timeStamp) < 0);
     }
 
 }
