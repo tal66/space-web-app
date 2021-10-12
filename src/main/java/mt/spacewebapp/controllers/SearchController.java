@@ -39,15 +39,17 @@ public class SearchController {
     public String destinationSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
         searchForm.setOptions(destinationService.getSearchOptionsForNumbersForm());
         model.addAttribute("searchDestForm", searchForm);
-        if (!destinationSearchParamsValidation(searchForm, errors, model)){
-            return "search";
+        String errorMessage = validateDestinationSearchParams(searchForm, errors, model);
+        if (errorMessage.length() == 0){
+            List<Destination> results = getResults(searchForm);
+            model.addAttribute("destResults", results);
+        } else {
+            model.addAttribute("errorMessage", errorMessage);
         }
-        List<Destination> results = processFormAndGetResults(searchForm);
-        model.addAttribute("destResults", results);
         return "search";
     }
 
-    private List<Destination> processFormAndGetResults(SearchForm searchForm){
+    private List<Destination> getResults(SearchForm searchForm){
         String selectedField = searchForm.getSelectedOption();
         String userText = searchForm.getUserText();
         double userNumber = Double.parseDouble(userText.replace(",",""));
@@ -55,7 +57,10 @@ public class SearchController {
         return results;
     }
 
-    private boolean destinationSearchParamsValidation(SearchForm searchForm, BindingResult errors, Model model){
+    /**
+     * @return empty String if valid, error message if not valid.
+     */
+    private String validateDestinationSearchParams(SearchForm searchForm, BindingResult errors, Model model){
         String errorMessage = "";
         if (errors.hasErrors()) {
             errorMessage = "binding error";
@@ -63,35 +68,35 @@ public class SearchController {
         if (searchForm.getUserText().isBlank()){
             errorMessage = "search is blank";
         }
+
         try {
             Double.parseDouble(searchForm.getUserText().replace(",",""));
         } catch (Exception e){
             errorMessage = "numbers only";
         }
-        if (!errorMessage.isBlank() ) {
-            model.addAttribute("errorMessage", errorMessage);
-            return false;
-        }
-        return true;
+
+        return errorMessage;
     }
 
-    @PostMapping(value = "/search", params = "search-trip")
+        @PostMapping(value = "/search", params = "search-trip")
     public String tripSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
         model.addAttribute("searchTripForm", searchForm);
-        if (!tripSearchParamsValidation(searchForm, model)){
-            return "search";
+        String errorMessage = validateTripSearchParams(searchForm, model);
+        if (errorMessage.length() == 0){
+            List<Trip> results = processTripFormAndGetResults(searchForm);
+            model.addAttribute("tripResults", results);
+        } else {
+            model.addAttribute("errorMessage", errorMessage);
         }
-        List<Trip> results = processTripFormAndGetResults(searchForm);
-        model.addAttribute("tripResults", results);
         return "search";
     }
 
-    private boolean tripSearchParamsValidation(SearchForm searchForm, Model model){
+    private String validateTripSearchParams(SearchForm searchForm, Model model){
+        String errorMessage = "";
         if (searchForm.getDate1() == null || searchForm.getDate2() == null){
-            model.addAttribute("errorMessage", "Select 2 dates");
-            return false;
+            errorMessage = "Select 2 dates";
         }
-        return true;
+        return errorMessage;
     }
 
     private List<Trip> processTripFormAndGetResults(SearchForm searchForm){
