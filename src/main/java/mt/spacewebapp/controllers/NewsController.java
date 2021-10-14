@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 @Slf4j
 public class NewsController {
-   private NewsService newsService;
+    private NewsService newsService;
 
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
@@ -47,7 +47,7 @@ public class NewsController {
     }
 
     @PostMapping(value="/news", params = "submit-news")
-    public String submitNewsArticleForm(Model model, @Valid @ModelAttribute NewsArticle article, BindingResult errors){
+    public String submitNewsArticle(Model model, @Valid @ModelAttribute NewsArticle article, BindingResult errors){
         newsService.save(article);
         addAllArticlesToModel(model);
         return "news";

@@ -46,8 +46,8 @@ public class TicketController {
             return "error";
         }
         ticket.setCustomer(customerService.findByUserName(authentication.getName()));
-        Ticket saved = ticketService.save(ticket);
-        log.info("saved: " + saved);
+        Ticket savedTicket = ticketService.save(ticket);
+        log.info("saved: " + savedTicket);
         model.addAttribute("ticket", ticket);
         return "booking";
     }

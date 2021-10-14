@@ -1,7 +1,9 @@
 package mt.spacewebapp.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Trip;
+import mt.spacewebapp.models.forms.FormValidation;
 import mt.spacewebapp.models.forms.SearchForm;
 import mt.spacewebapp.services.DestinationService;
 import mt.spacewebapp.services.TripService;
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
+@Slf4j
 public class SearchController {
     private DestinationService destinationService;
     private TripService tripService;
@@ -39,12 +42,13 @@ public class SearchController {
     public String destinationSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
         searchForm.setOptions(destinationService.getSearchOptionsForNumbersForm());
         model.addAttribute("searchDestForm", searchForm);
-        String errorMessage = validateDestinationSearchParams(searchForm, errors, model);
-        if (errorMessage.length() == 0){
+        FormValidation formValidation = validateDestinationSearchParams(searchForm, errors);
+        if (!formValidation.hasErrors()){
             List<Destination> results = getResults(searchForm);
             model.addAttribute("destResults", results);
+            log.info("search results: " + results.size());
         } else {
-            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("errorMessage", formValidation.getErrorMessage());
         }
         return "search";
     }
@@ -57,11 +61,9 @@ public class SearchController {
         return results;
     }
 
-    /**
-     * @return empty String if valid, error message if not valid.
-     */
-    private String validateDestinationSearchParams(SearchForm searchForm, BindingResult errors, Model model){
+    private FormValidation validateDestinationSearchParams(SearchForm searchForm, BindingResult errors){
         String errorMessage = "";
+
         if (errors.hasErrors()) {
             errorMessage = "binding error";
         }
@@ -74,29 +76,29 @@ public class SearchController {
         } catch (Exception e){
             errorMessage = "numbers only";
         }
-
-        return errorMessage;
+        return new FormValidation(errorMessage, errorMessage.isBlank());
     }
 
-        @PostMapping(value = "/search", params = "search-trip")
+    @PostMapping(value = "/search", params = "search-trip")
     public String tripSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
         model.addAttribute("searchTripForm", searchForm);
-        String errorMessage = validateTripSearchParams(searchForm, model);
-        if (errorMessage.length() == 0){
+        FormValidation formValidation = validateTripSearchParams(searchForm);
+        if (!formValidation.hasErrors()){
             List<Trip> results = processTripFormAndGetResults(searchForm);
             model.addAttribute("tripResults", results);
         } else {
-            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("errorMessage", formValidation.getErrorMessage());
         }
         return "search";
     }
 
-    private String validateTripSearchParams(SearchForm searchForm, Model model){
+    private FormValidation validateTripSearchParams(SearchForm searchForm){
         String errorMessage = "";
         if (searchForm.getDate1() == null || searchForm.getDate2() == null){
             errorMessage = "Select 2 dates";
         }
-        return errorMessage;
+
+        return new FormValidation(errorMessage, errorMessage.isBlank());
     }
 
     private List<Trip> processTripFormAndGetResults(SearchForm searchForm){
@@ -105,7 +107,6 @@ public class SearchController {
         List<Trip> results = tripService.findByDateAfterAndDateBeforeOrderByDate(date1, date2);
         return results;
     }
-
 
 
 }

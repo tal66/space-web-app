@@ -19,8 +19,8 @@ import java.util.List;
 @Controller
 @Slf4j
 public class ReviewsController {
-    ReviewsService reviewsService;
-    CustomerService customerService;
+    private ReviewsService reviewsService;
+    private CustomerService customerService;
 
     public ReviewsController(ReviewsService reviewsService, CustomerService customerService) {
         this.reviewsService = reviewsService;
