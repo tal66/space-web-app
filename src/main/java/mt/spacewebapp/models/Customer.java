@@ -15,6 +15,8 @@ public class Customer{
     private String userName;
     private String firstName;
     private String lastName;
+    private String email;
+    private String phone;
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private List<Ticket> tickets;
@@ -51,4 +53,21 @@ public class Customer{
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 }

@@ -1,9 +1,9 @@
 
-INSERT INTO Customers (FIRST_NAME, LAST_NAME, user_name)
+INSERT INTO Customers (FIRST_NAME, LAST_NAME, user_name, email, phone)
 VALUES
-('user', 'lastname', 'user'),
-('Neil', 'lastname', 'user2'),
-('Admin', 'lastname', 'admin');
+('user', 'lastname', 'user', 'email', 'phone'),
+('Neil', 'lastname', 'user2', 'email', 'phone'),
+('Admin', 'lastname', 'admin', 'email', 'phone');
 
 --
 

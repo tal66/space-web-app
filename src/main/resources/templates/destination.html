@@ -46,8 +46,9 @@
 
             <br>
             <button class="book-button" type="submit" name="save-booking">Book</button>
-                <p><a th:href="@{/login}">Login</a> before booking </p>
+
         </form>
+        <div th:if="${!isLoggedIn}" style="margin-top: 5px"><a th:href="@{/login}">Login</a> before booking </div>
 
 <br>
 <br>

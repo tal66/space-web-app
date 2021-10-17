@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.Trip;
-import mt.spacewebapp.services.CustomerService;
-import mt.spacewebapp.services.DestinationService;
-import mt.spacewebapp.services.TicketService;
-import mt.spacewebapp.services.TripService;
+import mt.spacewebapp.services.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,15 +23,15 @@ import java.util.List;
 @Controller
 public class TicketController {
 
-    private final DestinationService destinationService;
-    private final TripService tripService;
-    private final TicketService ticketService;
-    private final CustomerService customerService;
+    private final IDestinationService destinationService;
+    private final ITripService tripService;
+    private final ITicketService ITicketService;
+    private final ICustomerService customerService;
 
-    public TicketController(DestinationService destinationService, TripService tripService, TicketService ticketService, CustomerService customerService) {
+    public TicketController(IDestinationService destinationService, ITripService tripService, ITicketService ticketService, ICustomerService customerService) {
         this.destinationService = destinationService;
         this.tripService = tripService;
-        this.ticketService = ticketService;
+        this.ITicketService = ticketService;
         this.customerService = customerService;
     }
 
@@ -46,7 +42,7 @@ public class TicketController {
             return "error";
         }
         ticket.setCustomer(customerService.findByUserName(authentication.getName()));
-        Ticket savedTicket = ticketService.save(ticket);
+        Ticket savedTicket = ITicketService.save(ticket);
         log.info("saved: " + savedTicket);
         model.addAttribute("ticket", ticket);
         return "booking";
@@ -63,12 +59,13 @@ public class TicketController {
 
 
     @GetMapping("destination/{destinationName}")
-    public String destinationInfoAndBookingForm(Model model, @PathVariable(value="destinationName") String destinationName){
+    public String destinationInfoAndBookingForm(Model model, @PathVariable(value="destinationName") String destinationName, Authentication authentication){
         Destination destination = destinationService.findByName(destinationName);
         model.addAttribute("destination", destination);
+        model.addAttribute("isLoggedIn", authentication != null);
 
-        model.addAttribute("ticket", ticketService.create());
-        model.addAttribute("classOptions", ticketService.ticketClassOptions());
+        model.addAttribute("ticket", ITicketService.create());
+        model.addAttribute("classOptions", ITicketService.ticketClassOptions());
 
         List<Trip> tripList = tripService.availableTripsToDestination(destination);
         model.addAttribute("trips", tripList);

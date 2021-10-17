@@ -3,8 +3,11 @@
         first_name varchar(255),
         last_name varchar(255),
         user_name varchar(255),
+        email varchar(255),
+        phone varchar(255),
         primary key (customer_id)
     );
+
 
     create table destinations (
         id integer not null AUTO_INCREMENT,
@@ -77,3 +80,8 @@
         foreign key (customer_id) references customers(customer_id)
     );
 
+    create index idx_orbit_distance
+    on destinations (avg_orbit_distance_km);
+
+    create index idx_radius
+    on destinations (radius_km);

@@ -3,6 +3,7 @@ package mt.spacewebapp.controllers;
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.models.Review;
 import mt.spacewebapp.services.CustomerService;
+import mt.spacewebapp.services.ICustomerService;
 import mt.spacewebapp.services.ReviewsService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,9 +21,9 @@ import java.util.List;
 @Slf4j
 public class ReviewsController {
     private ReviewsService reviewsService;
-    private CustomerService customerService;
+    private ICustomerService customerService;
 
-    public ReviewsController(ReviewsService reviewsService, CustomerService customerService) {
+    public ReviewsController(ReviewsService reviewsService, ICustomerService customerService) {
         this.reviewsService = reviewsService;
         this.customerService = customerService;
     }
@@ -41,8 +42,7 @@ public class ReviewsController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping(value="/reviews", params = "add-review")
     public String showFormReview(Model model, Authentication authentication){
-        Review newReview = new Review();
-        newReview.setStars(5);
+        Review newReview = reviewsService.create();
         newReview.setCustomer(customerService.findByUserName(authentication.getName()));
         model.addAttribute("newReview", newReview);
         model.addAttribute("showReviewForm", true);

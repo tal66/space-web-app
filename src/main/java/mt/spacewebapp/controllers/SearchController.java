@@ -5,14 +5,12 @@ import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Trip;
 import mt.spacewebapp.models.forms.FormValidation;
 import mt.spacewebapp.models.forms.SearchForm;
-import mt.spacewebapp.services.DestinationService;
-import mt.spacewebapp.services.TripService;
+import mt.spacewebapp.services.IDestinationService;
+import mt.spacewebapp.services.ITripService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -21,17 +19,17 @@ import java.util.List;
 @Controller
 @Slf4j
 public class SearchController {
-    private DestinationService destinationService;
-    private TripService tripService;
+    private IDestinationService destinationService;
+    private ITripService tripService;
 
-    public SearchController(DestinationService destinationService, TripService tripService) {
+    public SearchController(IDestinationService destinationService, ITripService tripService) {
         this.destinationService = destinationService;
         this.tripService = tripService;
     }
 
     @GetMapping("/search")
     public String search(Model model){
-        SearchForm searchDestForm = destinationService.getSearchByNumbersForm();
+        SearchForm searchDestForm = destinationService.createSearchByNumbersForm();
         SearchForm searchTripForm = new SearchForm();
         model.addAttribute("searchDestForm", searchDestForm);
         model.addAttribute("searchTripForm", searchTripForm);
@@ -44,7 +42,7 @@ public class SearchController {
         model.addAttribute("searchDestForm", searchForm);
         FormValidation formValidation = validateDestinationSearchParams(searchForm, errors);
         if (!formValidation.hasErrors()){
-            List<Destination> results = getResults(searchForm);
+            List<Destination> results = getDestinationResults(searchForm);
             model.addAttribute("destResults", results);
             log.info("search results: " + results.size());
         } else {
@@ -53,7 +51,15 @@ public class SearchController {
         return "search";
     }
 
-    private List<Destination> getResults(SearchForm searchForm){
+
+    @PostMapping(value = "api/search/destination*")
+    @ResponseBody
+    public List<Destination> destinationSearchResultsApi(@RequestParam String option, @RequestParam Double number){
+        log.info("search api");
+        return destinationService.searchByFieldGreaterThan(number, option);
+    }
+
+    private List<Destination> getDestinationResults(SearchForm searchForm){
         String selectedField = searchForm.getSelectedOption();
         String userText = searchForm.getUserText();
         double userNumber = Double.parseDouble(userText.replace(",",""));

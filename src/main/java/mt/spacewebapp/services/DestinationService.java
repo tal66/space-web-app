@@ -17,17 +17,18 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class DestinationService {
+public class DestinationService implements IDestinationService {
 
     private DestinationRepository destinationRepository;
     private List<Destination> allDestinations;
-    private Map<String, List<Destination>> DestinationsByType;
+    private Map<String, List<Destination>> destinationsByType;
     private LocalDateTime timeStamp;
 
     public DestinationService(DestinationRepository destinationRepository) {
         this.destinationRepository = destinationRepository;
     }
 
+    @Override
     public List<Destination> searchByFieldGreaterThan(Double num, String field){
         try {
             return destinationsWithFieldGreaterThan(num, field);
@@ -37,6 +38,7 @@ public class DestinationService {
         }
     }
 
+    // not optimal. done this way for learning purposes
     private List<Destination> destinationsWithFieldGreaterThan(Double num, String field){
         Method getter = fieldToGetter(field);
         List<Destination> result = allDestinations.stream()
@@ -65,41 +67,45 @@ public class DestinationService {
         return null;
     }
 
-    public SearchForm getSearchByNumbersForm(){
+    @Override
+    public SearchForm createSearchByNumbersForm(){
         List<Option> options = getSearchOptionsForNumbersForm();
         SearchForm searchForm = new SearchForm(options);
         return searchForm;
     }
 
+    @Override
     public List<Option> getSearchOptionsForNumbersForm(){
         return List.of(
-                new Option("Radius_km", "Radius (km)"),
+                new Option("radius_km", "Radius (km)"),
                 new Option("orbitPeriod_earthYears", "Orbit Period (Earth Years)"),
                 new Option("avgOrbitDistance_km", "Average Orbit Distance (km)"));
     }
 
 
-    public Map<String, List<Destination>> DestinationsByTypeMap(){
-        return this.DestinationsByType;
+    @Override
+    public Map<String, List<Destination>> destinationsByTypeMap(){
+        return this.destinationsByType;
     }
 
 
+    @Override
     public Destination findByName(String name){
         return destinationRepository.findByName(name);
     }
 
 
+    @Override
     public List<Destination> findAll(){
-        log.info("finding all destinations");
-        return destinationRepository.findAll();
+        return this.allDestinations;
     }
 
     @PostConstruct
     @Scheduled(fixedRate = 1000 * 60 * 15)
     private void updateDestinationsMemberVariables(){
-        this.allDestinations = this.findAll();
+        this.allDestinations = destinationRepository.findAll();
         log.info("update allDestinations: " + this.allDestinations.size() + " destinations");
-        this.DestinationsByType= allDestinations.stream()
+        this.destinationsByType = allDestinations.stream()
                 .collect(Collectors.groupingBy(d -> d.getType().toString()));
         this.timeStamp = LocalDateTime.now();
     }

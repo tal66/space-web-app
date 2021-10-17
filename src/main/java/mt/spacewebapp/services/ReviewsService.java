@@ -13,11 +13,19 @@ import java.util.List;
 public class ReviewsService {
     private ReviewsRepository reviewsRepository;
     private CacheService cacheService;
+    private int DEFAULT_STARS = 5;
 
     public ReviewsService(ReviewsRepository reviewsRepository, CacheService cacheService) {
         this.reviewsRepository = reviewsRepository;
         this.cacheService = cacheService;
     }
+
+    public Review create(){
+        Review newReview = new Review();
+        newReview.setStars(DEFAULT_STARS);
+        return newReview;
+    }
+
 
     @Cacheable("reviews")
     public List<Review> findAll(){

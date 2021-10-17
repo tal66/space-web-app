@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class TripService {
+public class TripService implements ITripService {
 
     private TripRepository tripRepository;
 
@@ -22,27 +22,32 @@ public class TripService {
     }
 
 
+    @Override
     public List<Trip> availableTripsToDestination(Destination destination){
         List<Trip> tripList = findByDestination(destination);
         List<Trip> availableTripList = tripList.stream().filter(Trip::isAvailable).collect(Collectors.toList());
         return availableTripList;
     }
 
+    @Override
     public List<Trip> findByDestination(Destination destination){
         List<Trip> tripList = tripRepository.findByTo(destination);
         log.info(String.format("All Trips to %s: %d", destination.getName(), tripList.size()));
         return tripList;
     }
 
+    @Override
     public Optional<Trip> findById(Integer id){
         return tripRepository.findById(id);
     }
 
+    @Override
     public List<Trip> findAll(){
         List<Trip> tripList = tripRepository.findAll();
         return tripList;
     }
 
+    @Override
     public List<Trip> findByDateAfterAndDateBeforeOrderByDate(LocalDate date1, LocalDate date2){
         return tripRepository.findByDateAfterAndDateBeforeOrderByDate(date1, date2);
     }
