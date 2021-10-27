@@ -10,50 +10,51 @@
 <body>
     <div th:insert="fragments/navbar.html"> </div>
 
+    <div class="main">
+        <h2 style="display: inline-block;" th:text=${destination.name}></h2>
 
-    <h2 style="display: inline-block;" th:text=${destination.name}></h2>
+        <div style="margin-left: 3%">
 
-    <div style="margin-left: 3%">
+            <div class="polaroid" style="float: right; width: 35%">
+                <img style="max-height: unset;" th:src="@{${'/img/' + destination.mainPic}}">
+            </div>
 
-        <div class="polaroid" style="float: right; width: 35%">
-            <img style="max-height: unset;" th:src="@{${'/img/' + destination.mainPic}}">
+            <div style="float: left; max-width: 50%;">
+                <p th:text="'Radius: ' + ${#numbers.formatInteger(destination.radius_km,3,'COMMA')} + ' (km)'"></p>
+                <p th:text="'Average Orbit Distance: ' + ${#numbers.formatInteger(destination.avgOrbitDistance_km,3,'COMMA')} + ' (km)' "></p>
+                <p th:text="'Orbit Time: ' + ${destination.orbitPeriod_earthYears} + ' (earth years)'"></p>
+                <p class="fact" th:text="${destination.factToDisplay}"></p>
+            </div>
+
+
+            <h2 style="clear: left;">Book your trip:</h2>
+
+                <form style="margin-left: 1%;" action="#" th:action="@{/booking}" th:object="${ticket}" method="POST" >
+
+                <p><strong>Select Date:</strong>
+                <select th:field="*{tripId}">
+                    <option th:each="t: ${trips}" th:value="${t.id}" th:text="${t.date}" >date option</option>
+                </select>
+                </p>
+
+                <p><strong>Select Class:</strong>
+                <select th:field="*{ticketClass}">
+                    <option th:each="c: ${classOptions}" th:value="${c}" th:text="${c}" >class option</option>
+                </select>
+
+                </p>
+
+                <br>
+                <button class="book-button" type="submit" name="save-booking">Book</button>
+
+            </form>
+            <div th:if="${!isLoggedIn}" style="margin-top: 5px"><a th:href="@{/login}">Login</a> before booking </div>
+
+    <br>
+    <br>
+
         </div>
-
-        <div style="float: left; max-width: 50%;">
-            <p th:text="'Radius: ' + ${#numbers.formatInteger(destination.radius_km,3,'COMMA')} + ' (km)'"></p>
-            <p th:text="'Average Orbit Distance: ' + ${#numbers.formatInteger(destination.avgOrbitDistance_km,3,'COMMA')} + ' (km)' "></p>
-            <p th:text="'Orbit Time: ' + ${destination.orbitPeriod_earthYears} + ' (earth years)'"></p>
-            <p class="fact" th:text="${destination.factToDisplay}"></p>
-        </div>
-
-
-        <h2 style="clear: left;">Book your trip:</h2>
-
-            <form style="margin-left: 1%;" action="#" th:action="@{/booking}" th:object="${ticket}" method="POST" >
-
-            <p><strong>Select Date:</strong>
-            <select th:field="*{trip}">
-                <option th:each="t: ${trips}" th:value="${t.tripId}" th:text="${t.date}" >date option</option>
-            </select>
-            </p>
-
-            <p><strong>Select Class:</strong>
-            <select th:field="*{ticketClass}">
-                <option th:each="c: ${classOptions}" th:value="${c}" th:text="${c}" >class option</option>
-            </select>
-
-            </p>
-
-            <br>
-            <button class="book-button" type="submit" name="save-booking">Book</button>
-
-        </form>
-        <div th:if="${!isLoggedIn}" style="margin-top: 5px"><a th:href="@{/login}">Login</a> before booking </div>
-
-<br>
-<br>
-
-</div>
+    </div>
 </body>
 
 </html>

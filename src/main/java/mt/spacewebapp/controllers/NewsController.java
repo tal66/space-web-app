@@ -1,8 +1,11 @@
 package mt.spacewebapp.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import mt.spacewebapp.controllers.shared.DtoUtil;
+import mt.spacewebapp.dto.NewsArticleDto;
 import mt.spacewebapp.models.NewsArticle;
 import mt.spacewebapp.services.NewsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,8 @@ import java.util.List;
 @Controller
 @Slf4j
 public class NewsController {
+    @Autowired
+    DtoUtil dtoUtil;
     private NewsService newsService;
 
     public NewsController(NewsService newsService) {
@@ -32,25 +37,32 @@ public class NewsController {
 
     private void addAllArticlesToModel(Model model){
         List<NewsArticle> articles = newsService.findAll();
-        model.addAttribute("articles", articles);
+        model.addAttribute("articles", dtoUtil.mapList(articles, NewsArticleDto.class));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @CacheEvict(value = "news_articles", allEntries = true)
     @PostMapping(value="/news", params = "add-news")
     public String showFormAddNewsArticle(Model model){
-        NewsArticle newArticle = new NewsArticle();
-        model.addAttribute("newArticle", newArticle);
+        model.addAttribute("newArticle", new NewsArticleDto());
         model.addAttribute("showArticleForm", true);
         addAllArticlesToModel(model);
         return "news";
     }
 
     @PostMapping(value="/news", params = "submit-news")
-    public String submitNewsArticle(Model model, @Valid @ModelAttribute NewsArticle article, BindingResult errors){
-        newsService.save(article);
+    public String submitNewsArticle(Model model, @Valid @ModelAttribute NewsArticleDto articleDto, BindingResult errors){
+        NewsArticle newsArticle = toNewsArticle(articleDto);
+        newsService.save(newsArticle);
         addAllArticlesToModel(model);
         return "news";
+    }
+
+    private NewsArticle toNewsArticle (NewsArticleDto articleDto){
+        NewsArticle newsArticle = newsService.create();
+        newsArticle.setHeadline(articleDto.getHeadline());
+        newsArticle.setText(articleDto.getText());
+        return newsArticle;
     }
 
 }

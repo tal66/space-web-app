@@ -22,6 +22,10 @@ public class NewsService {
         return newsArticleRepository.save(article);
     }
 
+    public NewsArticle create(){
+        return new NewsArticle();
+    }
+
     @Cacheable("news_articles")
     public List<NewsArticle> findAll(){return newsArticleRepository.findAll();}
 }

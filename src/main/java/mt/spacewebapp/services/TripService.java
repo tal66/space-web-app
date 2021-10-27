@@ -49,6 +49,6 @@ public class TripService implements ITripService {
 
     @Override
     public List<Trip> findByDateAfterAndDateBeforeOrderByDate(LocalDate date1, LocalDate date2){
-        return tripRepository.findByDateAfterAndDateBeforeOrderByDate(date1, date2);
+        return tripRepository.findByDateBetweenOrderByDate(date1, date2);
     }
 }

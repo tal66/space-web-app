@@ -1,8 +1,11 @@
 package mt.spacewebapp.controllers.rest;
 
 import lombok.extern.slf4j.Slf4j;
+import mt.spacewebapp.controllers.shared.DtoUtil;
+import mt.spacewebapp.dto.TicketDto;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.services.ITicketService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,8 @@ import java.util.List;
 @RequestMapping("/api/tickets")
 @Slf4j
 public class TicketRestController {
+    @Autowired
+    private DtoUtil dtoUtil;
     private ITicketService ITicketService;
 
     public TicketRestController(ITicketService ticketService) {
@@ -23,16 +28,17 @@ public class TicketRestController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Ticket> getAllTickets(){
+    public List<TicketDto> getAllTickets(){
         log.info("api call: get all tickets");
-        return ITicketService.findAll();
+        List<Ticket> tickets = ITicketService.findAll();
+        return dtoUtil.mapList(tickets, TicketDto.class);
     }
 
     @GetMapping("/{id}")
-    public Ticket getById(@PathVariable String id){
+    public TicketDto getById(@PathVariable String id){
         log.info("api call: get ticket " + id);
         Ticket ticket = ITicketService.findById(id).get();
-        return ticket;
+        return dtoUtil.map(ticket, TicketDto.class);
     }
 
 }

@@ -24,12 +24,12 @@
 
 
     create table trips (
-        trip_id integer not null AUTO_INCREMENT,
+        id integer not null AUTO_INCREMENT,
         from_dest varchar(255),
         to_dest varchar(255),
         trip_date date,
-        number_Of_Passengers integer,
-        primary key (trip_id),
+        planned_number_of_passengers integer,
+        primary key (id),
         foreign key (to_dest) references destinations,
         foreign key (from_dest) references destinations
         );

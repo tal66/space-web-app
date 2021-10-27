@@ -1,9 +1,9 @@
 
 INSERT INTO Customers (FIRST_NAME, LAST_NAME, user_name, email, phone)
 VALUES
-('user', 'lastname', 'user', 'email', 'phone'),
-('Neil', 'lastname', 'user2', 'email', 'phone'),
-('Admin', 'lastname', 'admin', 'email', 'phone');
+('user', 'lastname', 'user', 'user@email.com', '123456'),
+('Neil', 'lastname', 'user2', 'user2@email.com', '223456'),
+('Admin', 'lastname', 'admin', 'admin@email.com', '323456');
 
 --
 
@@ -32,7 +32,7 @@ VALUES
 (11, 'Pluto', 2, 1151, 5906440628, 248.89, -232, '09_pluto.jpg',
 'The surface of Pluto is extremely cold, so it seems unlikely that life could exist there. Have a good trip.');
 
-INSERT INTO Trips (from_dest, to_dest, trip_date, number_Of_Passengers)
+INSERT INTO Trips (from_dest, to_dest, trip_date, planned_number_of_passengers)
 VALUES
  (3, 9, '2021-12-20', 10),
  (3, 9, '2021-12-21', 10),
@@ -64,9 +64,9 @@ VALUES
  (3, 8, '2022-11-01', 10),
  (3, 8, '2022-12-02', 10),
  (3, 8, '2022-12-03', 10),
- (3, 11, '2023-10-01', 10),
- (3, 11, '2023-11-01', 10),
- (3, 11, '2023-12-01', 10)
+ (3, 11, '2023-10-01', 20),
+ (3, 11, '2023-11-01', 20),
+ (3, 11, '2023-12-01', 20)
 ;
 
 

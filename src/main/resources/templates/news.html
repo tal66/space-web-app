@@ -8,38 +8,39 @@
 
 <body>
     <div th:insert="fragments/navbar.html"> </div>
+    <div class="main">
+        <h2>News</h2>
 
-    <h2>News</h2>
-
-    <div class="add-post-form">
-        <div>
-            <form  th:action="@{/news}" method="post">
-                <input class="side-button" type="submit" value="add story (admin only)" name="add-news" />
-            </form>
-        </div>
-    </div>
-
-
-
-    <span th:if="${showArticleForm}" style="margin-right: 5%; float: right; padding: 5px; clear: both; width: 25%">
-        <span th:insert="fragments/new_article_form.html"></span>
-    </span>
-
-    <div class="posts-container">
-        <div style="max-height: unset;">
-
-            <div th:each="i: ${#numbers.sequence(articles.size() - 1, 0, -1)}" class="article">
-                <h4 th:text="${articles[i].headline}" style="margin: 0;"></h4>
-                <p th:text="${articles[i].dateCreated}" style="font-size: 11px;color: gray;"></p>
-
-                <p th:text="${articles[i].text}" style="white-space: pre-line"></p>
-                <div th:each="image: ${articles[i].imageList}" >
-                    <img th:src="@{${image.address}}" style="object-fit: contain; max-height: unset; width: 80%">
-                    <p th:text="${image.text}"></p>
-                </div>
+        <div class="add-post-form">
+            <div>
+                <form  th:action="@{/news}" method="post">
+                    <input class="side-button" type="submit" value="add story (admin only)" name="add-news" />
+                </form>
             </div>
+        </div>
 
 
+
+        <span th:if="${showArticleForm}" style="margin-right: 5%; float: right; padding: 5px; clear: both; width: 25%">
+            <span th:insert="fragments/new_article_form.html"></span>
+        </span>
+
+        <div class="posts-container">
+            <div style="max-height: unset;">
+
+                <div th:each="i: ${#numbers.sequence(articles.size() - 1, 0, -1)}" class="article">
+                    <h4 th:text="${articles[i].headline}" style="margin: 0;"></h4>
+                    <p th:text="${articles[i].dateCreated}" style="font-size: 11px;color: gray;"></p>
+
+                    <p th:text="${articles[i].text}" style="white-space: pre-line"></p>
+                    <div th:each="image: ${articles[i].imageList}" >
+                        <img th:src="@{${image.address}}" style="object-fit: contain; max-height: unset; width: 80%">
+                        <p th:text="${image.text}"></p>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
     </div>
 </body>

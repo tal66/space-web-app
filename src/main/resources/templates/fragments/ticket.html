@@ -1,9 +1,9 @@
 <div class="ticket" >
 
     <p th:text="${'Ticket: ' + ticket.id}"></p>
-    <p th:text="${'Trip: ' + ticket.trip}"></p>
+    <p th:text="${'Trip: ' + ticket.tripId}"></p>
     <p th:text="${'Class: ' + ticket.ticketClass}"></p>
-    <p th:text="${'To: ' + ticket.trip.to.name}"></p>
-    <p th:text="${'Date: ' + ticket.trip.date}"></p>
+    <p th:text="${'To: ' + ticket.tripToDestinationName}"></p>
+    <p th:text="${'Date: ' + ticket.tripDate}"></p>
 
 </div>

@@ -1,12 +1,16 @@
 package mt.spacewebapp.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import mt.spacewebapp.controllers.shared.DtoUtil;
+import mt.spacewebapp.dto.DestinationDto;
+import mt.spacewebapp.dto.TripDto;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Trip;
 import mt.spacewebapp.models.forms.FormValidation;
 import mt.spacewebapp.models.forms.SearchForm;
 import mt.spacewebapp.services.IDestinationService;
 import mt.spacewebapp.services.ITripService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +23,8 @@ import java.util.List;
 @Controller
 @Slf4j
 public class SearchController {
+    @Autowired
+    private DtoUtil dtoUtil;
     private IDestinationService destinationService;
     private ITripService tripService;
 
@@ -43,7 +49,7 @@ public class SearchController {
         FormValidation formValidation = validateDestinationSearchParams(searchForm, errors);
         if (!formValidation.hasErrors()){
             List<Destination> results = getDestinationResults(searchForm);
-            model.addAttribute("destResults", results);
+            model.addAttribute("destResults", dtoUtil.mapList(results, DestinationDto.class));
             log.info("search results: " + results.size());
         } else {
             model.addAttribute("errorMessage", formValidation.getErrorMessage());
@@ -55,7 +61,6 @@ public class SearchController {
     @PostMapping(value = "api/search/destination*")
     @ResponseBody
     public List<Destination> destinationSearchResultsApi(@RequestParam String option, @RequestParam Double number){
-        log.info("search api");
         return destinationService.searchByFieldGreaterThan(number, option);
     }
 
@@ -91,7 +96,7 @@ public class SearchController {
         FormValidation formValidation = validateTripSearchParams(searchForm);
         if (!formValidation.hasErrors()){
             List<Trip> results = processTripFormAndGetResults(searchForm);
-            model.addAttribute("tripResults", results);
+            model.addAttribute("tripResults", dtoUtil.mapList(results, TripDto.class));
         } else {
             model.addAttribute("errorMessage", formValidation.getErrorMessage());
         }

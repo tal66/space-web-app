@@ -1,6 +1,5 @@
 package mt.spacewebapp.models;
 
-import mt.spacewebapp.models.enums.DestinationTypeConverter;
 import mt.spacewebapp.models.enums.TicketClass;
 import mt.spacewebapp.models.enums.TicketClassConverter;
 
@@ -40,7 +39,7 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return String.format("Ticket[%s, %s, trip: %d, to: %s, user: %s]", id, ticketClass, trip.getTripId(), trip.getTo().getName(), customer.getFirstName());
+        return String.format("Ticket[%s, %s, trip: %d, to: %s, user: %s]", id, ticketClass, trip.getId(), trip.getTo().getName(), customer.getFirstName());
     }
 
     public UUID getId() {

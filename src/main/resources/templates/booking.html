@@ -8,13 +8,12 @@
 
 <body>
     <div th:insert="fragments/navbar.html"> </div>
+    <div class="main">
+        <h2>Your Ticket:</h2>
 
+        <div th:insert="fragments/ticket.html"> </div>
 
-    <h2>Your Ticket:</h2>
-
-    <div th:insert="fragments/ticket.html"> </div>
-
-    <div><br>Please print and bring it with you.</div>
-
+        <div><br>Please print and bring it with you.</div>
+    </div>
 </body>
 </html>

@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface TripRepository extends JpaRepository<Trip, Integer> {
     List<Trip> findByTo(Destination destination);
-    List<Trip> findByDateAfterAndDateBeforeOrderByDate(LocalDate start, LocalDate end);
+    List<Trip> findByDateBetweenOrderByDate(LocalDate start, LocalDate end);
 }

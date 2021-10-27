@@ -8,19 +8,18 @@
 
 <body>
     <div th:insert="fragments/navbar.html"> </div>
+    <div class="main">
+        <h2>Our Top Destinations:</h2>
 
-    <h2>Our Top Destinations:</h2>
+        <div style="margin-left: 3%">
 
-    <div style="margin-left: 3%">
+            <span th:each="destinationType: ${destinationsByTypeMap}">
+                <div style="clear: both;"></div>
+                <span th:if="${!destinationType.value.isEmpty()}">
 
-        <span th:each="destinationType: ${destinationsByTypeMap}">
-            <div style="clear: both;"></div>
-            <span th:if="${!destinationType.value.isEmpty()}">
+                    <p th:text="${destinationType.key} + 's:'"></p>
 
-                <p th:text="${destinationType.key} + 's:'"></p>
-                <span th:each="dest: ${destinationType.value}">
-
-                    <div class="polaroid">
+                    <div class="polaroid" th:each="dest: ${destinationType.value}">
                     <img th:src="@{${'/img/' + dest.mainPic}}">
                         <div class="container">
                             <p th:text="${dest.name}"></p>
@@ -29,15 +28,16 @@
                             <a th:href="@{${'/destination/' + dest.name}}"><button class="button-text">Book Now!</button></a>
                         </div>
                     </div>
+
+
+                    <br>
                 </span>
-
-                <br>
             </span>
-        </span>
 
 
+        </div>
+        <br>
+        <br>
     </div>
-    <br>
-    <br>
 </body>
 </html>

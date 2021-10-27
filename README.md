@@ -3,12 +3,13 @@
 
 features:
 - basic info about planets
-- search planet by numeric fields
-- rate and review trip
 - login page (2 example users)
+- search planet by numeric fields
 - book tickets to trips
 - view booked tickets
+- rate and review trip
 - news page
+- API to view ticket info
 
 using H2 database (data is loaded on startup, stored in memory and will not persist)
 
