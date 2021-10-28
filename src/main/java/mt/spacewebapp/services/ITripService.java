@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITripService {
-    List<Trip> availableTripsToDestination(Destination destination);
-
-    List<Trip> findByDestination(Destination destination);
-    Optional<Trip> findById(Integer id);
     List<Trip> findAll();
+    Optional<Trip> findById(Integer id);
+    List<Trip> findByDestination(Destination destination);
+    List<Trip> findByDateBetweenOrderByDate(LocalDate date1, LocalDate date2);
 
-    List<Trip> findByDateAfterAndDateBeforeOrderByDate(LocalDate date1, LocalDate date2);
+    List<Trip> availableTripsToDestination(Destination destination);
 }

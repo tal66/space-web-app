@@ -6,7 +6,7 @@ features:
 - login page (2 example users)
 - search planet by numeric fields
 - book tickets to trips
-- view booked tickets
+- view or cancel booked tickets
 - rate and review trip
 - news page
 - API to view ticket info
@@ -16,6 +16,6 @@ using H2 database (data is loaded on startup, stored in memory and will not pers
 ## TODO:
 - registration page
 - redirect after login if user tried to book
-- cancel order
 - save seat for limited time
 - register to news updates
+- error handling

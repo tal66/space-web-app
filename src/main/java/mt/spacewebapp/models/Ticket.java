@@ -2,6 +2,8 @@ package mt.spacewebapp.models;
 
 import mt.spacewebapp.models.enums.TicketClass;
 import mt.spacewebapp.models.enums.TicketClassConverter;
+import mt.spacewebapp.models.enums.TicketStatus;
+import mt.spacewebapp.models.enums.TicketStatusConverter;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -17,6 +19,9 @@ public class Ticket {
     @Convert(converter = TicketClassConverter.class)
     @Column(name = "class")
     private TicketClass ticketClass;
+
+    @Convert(converter = TicketStatusConverter.class)
+    private TicketStatus status;
 
     @ManyToOne
     @JoinColumn(name = "tripId")
@@ -36,10 +41,10 @@ public class Ticket {
     }
 
 
-
     @Override
     public String toString() {
-        return String.format("Ticket[%s, %s, trip: %d, to: %s, user: %s]", id, ticketClass, trip.getId(), trip.getTo().getName(), customer.getFirstName());
+        return String.format("Ticket[%s, %s, trip: %d, to: %s, user: %s]",
+                id, ticketClass, trip.getId(), trip.getTo().getName(), customer.getFirstName());
     }
 
     public UUID getId() {
@@ -68,5 +73,13 @@ public class Ticket {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
     }
 }

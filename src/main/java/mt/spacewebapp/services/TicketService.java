@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.TicketRepository;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.enums.TicketClass;
+import mt.spacewebapp.models.enums.TicketStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,30 @@ public class TicketService implements ITicketService {
 
     @Override
     public Ticket create(){
-        return new Ticket();
+        Ticket ticket = new Ticket();
+        ticket.setStatus(TicketStatus.VALID);
+        return ticket;
+    }
+
+    @Override
+    public boolean setTicketStatusById(String id, TicketStatus status){
+        Optional<Ticket> ticketOptional = findById(id);
+        if (ticketOptional.isEmpty()){
+            return false;
+        }
+        Ticket ticket = ticketOptional.get();
+        ticket.setStatus(status);
+        save(ticket);
+        return true;
+    }
+
+    private boolean deleteTicketById(String id){
+        try {
+            ticketRepository.deleteById(UUID.fromString(id));
+        } catch (Exception e){
+            return false;
+        }
+        return true;
     }
 
     @Override

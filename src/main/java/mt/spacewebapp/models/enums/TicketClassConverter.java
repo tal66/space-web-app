@@ -1,7 +1,9 @@
 package mt.spacewebapp.models.enums;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter
 public class TicketClassConverter implements AttributeConverter<TicketClass, Integer> {
 
     @Override

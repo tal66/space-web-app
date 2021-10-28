@@ -18,7 +18,7 @@
         mean_temperature_c integer not null,
         orbit_period_earth_years double not null,
         radius_km double not null,
-        type varchar(255),
+        type integer,
         primary key (id)
     );
 
@@ -37,7 +37,8 @@
 
     create table tickets (
         id binary not null,
-        class varchar(255),
+        class integer,
+        status integer,
         customer_id integer,
         trip_id integer,
         primary key (id),

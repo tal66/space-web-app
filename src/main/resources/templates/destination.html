@@ -26,11 +26,8 @@
                 <p class="fact" th:text="${destination.factToDisplay}"></p>
             </div>
 
-
-            <h2 style="clear: left;">Book your trip:</h2>
-
-                <form style="margin-left: 1%;" action="#" th:action="@{/booking}" th:object="${ticket}" method="POST" >
-
+            <form class="book-form gray" action="#" th:action="@{/booking}" th:object="${ticket}" method="POST" >
+                <h2 style="margin-top: 10px;">Book your trip:</h2>
                 <p><strong>Select Date:</strong>
                 <select th:field="*{tripId}">
                     <option th:each="t: ${trips}" th:value="${t.id}" th:text="${t.date}" >date option</option>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tickets")
@@ -20,25 +21,28 @@ import java.util.List;
 public class TicketRestController {
     @Autowired
     private DtoUtil dtoUtil;
-    private ITicketService ITicketService;
+    private ITicketService ticketService;
 
     public TicketRestController(ITicketService ticketService) {
-        this.ITicketService = ticketService;
+        this.ticketService = ticketService;
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<TicketDto> getAllTickets(){
         log.info("api call: get all tickets");
-        List<Ticket> tickets = ITicketService.findAll();
+        List<Ticket> tickets = ticketService.findAll();
         return dtoUtil.mapList(tickets, TicketDto.class);
     }
 
     @GetMapping("/{id}")
     public TicketDto getById(@PathVariable String id){
         log.info("api call: get ticket " + id);
-        Ticket ticket = ITicketService.findById(id).get();
-        return dtoUtil.map(ticket, TicketDto.class);
+        Optional<Ticket> ticket = ticketService.findById(id);
+        if (ticket.isEmpty()){
+            return null;
+        }
+        return dtoUtil.map(ticket.get(), TicketDto.class);
     }
 
 }

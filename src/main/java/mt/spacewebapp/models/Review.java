@@ -28,7 +28,8 @@ public class Review {
     public Review() {
     }
 
-    public Review(Customer customer, @Max(value = 5, message = "maximum 5") @Min(value = 1, message = "minimum 1") int stars, @Size(max = 20, message = "maximum 20") String headline, @Size(max = 400) String text) {
+    public Review(Customer customer, @Max(value = 5, message = "maximum 5") @Min(value = 1, message = "minimum 1") int stars,
+                  @Size(max = 20, message = "maximum 20") String headline, @Size(max = 400) String text) {
         this.customer = customer;
         this.stars = stars;
         this.headline = headline;

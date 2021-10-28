@@ -17,15 +17,14 @@
         <div style="margin-left: 3%">
 
             <span th:if="${searchDestForm}">
-                <h4>Search Destination By Numbers:</h4>
 
-                <form id="dest-search-form" th:object="${searchDestForm}">
-
+                <form class="search-form gray" id="dest-search-form" th:object="${searchDestForm}">
+                    <h4>Search Destinations (By Numbers):</h4>
                     <select style="width: auto;" class="search-bar" th:field="*{selectedOption}">
                         <option th:each="opt: ${searchDestForm.options}" th:value="${opt.value}" th:text="${opt.text}" ></option>
                     </select>
 
-                    <span style="font-size: 20px;">  >  </span>
+                    <span style="font-size: 20px; margin: 10px;">  >  </span>
 
                     <input th:field="*{userText}" class="search-bar" type="text" placeholder="Number..">
                     <button name="search-dest" class="search-button" type="submit"><i class="fa fa-search"></i></button>
@@ -37,7 +36,7 @@
                 </span>
             </span>
 
-            <div id="destination-results">
+            <div class="search-results" id="destination-results">
             <span th:if="${destResults != null}">
                 <h4>Results:</h4>
 
@@ -61,13 +60,14 @@
             </div>
 
             <span th:if="${searchTripForm}">
-                <h4>Search Trips By Dates:</h4>
-                <form action="#" th:action="@{/search}" th:object="${searchTripForm}" method="POST">
 
-                    <span>From:<input th:field="*{date1}" type="date" class="search-bar" style="width: unset" required></span>
-                    <span>To:<input th:field="*{date2}" type="date" class="search-bar" style="width: unset" required></span>
-
-                    <button name="search-trip" class="search-button" type="submit"><i class="fa fa-search"></i></button>
+                <form class="search-form gray" action="#" th:action="@{/search}" th:object="${searchTripForm}" method="POST">
+                    <h4>Search Trips (By Dates):</h4>
+                    <div class="search-fields-container">
+                        <span>From:<input th:field="*{date1}" type="date" class="search-bar date" required></span>
+                        <span style="margin-left: 11px;">To:<input th:field="*{date2}" type="date" class="search-bar date" required></span>
+                        <button name="search-trip" class="search-button" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
                 </form>
 
                 <span th:if="${errorMessage != null}">
@@ -75,7 +75,7 @@
                 </span>
             </span>
 
-            <div id="trip-results" style="margin-bottom: 10rem;">
+            <div class="search-results" id="trip-results" style="margin-bottom: 10rem;">
             <span th:if="${tripResults != null}">
                 <h4>Results:</h4>
 
@@ -89,7 +89,8 @@
                         <tr th:each="trip: ${tripResults}">
                             <td th:text="${trip.date}"></td>
                             <td th:text="${trip.fromDestinationName}"></td>
-                            <td th:text="${trip.toDestinationName}"></td>
+                            <td><a th:href="@{${'/destination/' + trip.toDestinationName}}" th:text="${trip.toDestinationName}"></a></td>
+
                         </tr>
                     </table>
                 </span>

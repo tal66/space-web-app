@@ -11,9 +11,24 @@
     <div class="main">
         <h2>My Tickets</h2>
         <div th:if="${tickets == null or tickets.isEmpty()}">No tickets found. Choose a destination from the homepage</div>
+
         <div style="margin-left: 3%">
             <div th:each="ticket: ${tickets}" th:insert="fragments/ticket.html"> </div>
         </div>
+
+        <div th:if="${tickets != null and !tickets.isEmpty()}" style="margin: 3em;">
+            <form th:action="@{/my_tickets/cancel}" method="post" class="cancel-form gray">
+                <select th:name="id">
+                    <option th:each="ticket: ${tickets}"
+                            th:value="${ticket.id}"
+                            th:text="${ticket.id + '&nbsp;&nbsp;&nbsp;' + ticket.tripDate + ' ' + ticket.tripToDestinationName}" >
+                    </option>
+                </select>
+                <button type="submit">Cancel Booking</button>
+            </form>
+        </div>
+        <div th:if="${message != null}" th:text="${message}" style="margin: 2em; margin-left: 6em"></div>
+        <div style="margin-bottom: 6em;">&nbsp;</div>
     </div>
 </body>
 

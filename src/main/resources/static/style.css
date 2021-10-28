@@ -127,8 +127,9 @@ button {
 
 .fact {
   font-size: 20px;
-  background-color: #effafb;
   display: inline-block;
+  line-height: 2.5rem;
+  font-weight: 600;
 }
 
 .ticket {
@@ -141,21 +142,58 @@ button {
 }
 
 .search-bar {
- padding: 8px;
- font-size: 17px;
- width: 12%
+ padding: 5px;
+ font-size: 15px;
+ width: fit-content;
 }
 
 .search-button {
-  width: 4%;
-  padding: 9px;
+  padding: 7px 12px;
   color: black;
-  font-size: 17px;
+  font-size: 15px;
   border: 1px solid grey;
+  margin-inline-start: 5px;
+}
+
+input.date {
+  width: fit-content;
+  margin-inline: 5px;
+}
+
+.search-form {
+ width: fit-content;
+ padding: 15px;
+ margin: 15px;
+ min-width: 32rem;
+}
+
+.cancel-form{
+ width: fit-content;
+ padding: 25px;
+ margin: 15px;
+}
+
+.gray {
+ background: #f8f8f8;
+}
+
+.blue{
+ background-color: #effafb;
+}
+
+.book-form{
+ clear: left;
+ padding: 20px;
+ width: max-content;
+ border-right: 5rem solid #f000;
+}
+
+.search-results{
+ margin: 17px;
 }
 
 .login-label {
-  display: inline-block;
+ display: inline-block;
  width: 140px;
  text-align: left;
 }

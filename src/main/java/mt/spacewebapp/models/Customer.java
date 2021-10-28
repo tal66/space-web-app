@@ -1,9 +1,11 @@
 package mt.spacewebapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import mt.spacewebapp.models.enums.TicketStatus;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="Customers")
@@ -43,7 +45,9 @@ public class Customer{
     }
 
     public List<Ticket> getTickets() {
-        return tickets;
+        return tickets.stream()
+                .filter(t -> t.getStatus() == TicketStatus.VALID)
+                .collect(Collectors.toList());
     }
 
     public void setFirstName(String firstName) {

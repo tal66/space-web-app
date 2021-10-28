@@ -2,15 +2,19 @@ package mt.spacewebapp.models.forms;
 
 public class FormValidation {
     private String errorMessage;
-    private boolean isValid;
+    private boolean valid;
 
-    public FormValidation(String errorMessage, boolean isValid) {
+    public FormValidation(String errorMessage, boolean valid) {
         this.errorMessage = errorMessage;
-        this.isValid = isValid;
+        this.valid = valid;
     }
 
     public boolean hasErrors(){
-        return !this.isValid;
+        return !isValid();
+    }
+
+    public boolean isValid(){
+        return this.valid;
     }
 
     public String getErrorMessage() {

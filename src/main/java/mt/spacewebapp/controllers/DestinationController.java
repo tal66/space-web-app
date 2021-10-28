@@ -35,7 +35,7 @@ public class DestinationController {
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> dtoUtil.mapList(e.getValue(), DestinationDto.class)));
-        model.addAttribute("destinationsByTypeMap", destinationsByTypeMap);
+        model.addAttribute("destinationsByTypeMap", destinationsDtoByType);
         return "home";
     }
 

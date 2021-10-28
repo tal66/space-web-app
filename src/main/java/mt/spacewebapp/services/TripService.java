@@ -21,11 +21,11 @@ public class TripService implements ITripService {
         this.tripRepository = tripRepository;
     }
 
-
     @Override
     public List<Trip> availableTripsToDestination(Destination destination){
         List<Trip> tripList = findByDestination(destination);
-        List<Trip> availableTripList = tripList.stream().filter(Trip::isAvailable).collect(Collectors.toList());
+        List<Trip> availableTripList = tripList.stream()
+                .filter(Trip::isAvailable).collect(Collectors.toList());
         return availableTripList;
     }
 
@@ -48,7 +48,7 @@ public class TripService implements ITripService {
     }
 
     @Override
-    public List<Trip> findByDateAfterAndDateBeforeOrderByDate(LocalDate date1, LocalDate date2){
+    public List<Trip> findByDateBetweenOrderByDate(LocalDate date1, LocalDate date2){
         return tripRepository.findByDateBetweenOrderByDate(date1, date2);
     }
 }

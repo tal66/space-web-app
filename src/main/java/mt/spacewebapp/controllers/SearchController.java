@@ -46,8 +46,8 @@ public class SearchController {
     public String destinationSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
         searchForm.setOptions(destinationService.getSearchOptionsForNumbersForm());
         model.addAttribute("searchDestForm", searchForm);
-        FormValidation formValidation = validateDestinationSearchParams(searchForm, errors);
-        if (!formValidation.hasErrors()){
+        FormValidation formValidation = validateDestinationForm(searchForm, errors);
+        if (formValidation.isValid()){
             List<Destination> results = getDestinationResults(searchForm);
             model.addAttribute("destResults", dtoUtil.mapList(results, DestinationDto.class));
             log.info("search results: " + results.size());
@@ -57,22 +57,13 @@ public class SearchController {
         return "search";
     }
 
-
     @PostMapping(value = "api/search/destination*")
     @ResponseBody
     public List<Destination> destinationSearchResultsApi(@RequestParam String option, @RequestParam Double number){
         return destinationService.searchByFieldGreaterThan(number, option);
     }
 
-    private List<Destination> getDestinationResults(SearchForm searchForm){
-        String selectedField = searchForm.getSelectedOption();
-        String userText = searchForm.getUserText();
-        double userNumber = Double.parseDouble(userText.replace(",",""));
-        List<Destination> results = destinationService.searchByFieldGreaterThan(userNumber, selectedField);
-        return results;
-    }
-
-    private FormValidation validateDestinationSearchParams(SearchForm searchForm, BindingResult errors){
+    private FormValidation validateDestinationForm(SearchForm searchForm, BindingResult errors){
         String errorMessage = "";
 
         if (errors.hasErrors()) {
@@ -90,12 +81,20 @@ public class SearchController {
         return new FormValidation(errorMessage, errorMessage.isBlank());
     }
 
+    private List<Destination> getDestinationResults(SearchForm searchForm){
+        String selectedField = searchForm.getSelectedOption();
+        String userText = searchForm.getUserText();
+        double userNumber = Double.parseDouble(userText.replace(",",""));
+        List<Destination> results = destinationService.searchByFieldGreaterThan(userNumber, selectedField);
+        return results;
+    }
+
     @PostMapping(value = "/search", params = "search-trip")
     public String tripSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
         model.addAttribute("searchTripForm", searchForm);
-        FormValidation formValidation = validateTripSearchParams(searchForm);
-        if (!formValidation.hasErrors()){
-            List<Trip> results = processTripFormAndGetResults(searchForm);
+        FormValidation formValidation = validateTripForm(searchForm);
+        if (formValidation.isValid()){
+            List<Trip> results = getTripResults(searchForm);
             model.addAttribute("tripResults", dtoUtil.mapList(results, TripDto.class));
         } else {
             model.addAttribute("errorMessage", formValidation.getErrorMessage());
@@ -103,21 +102,19 @@ public class SearchController {
         return "search";
     }
 
-    private FormValidation validateTripSearchParams(SearchForm searchForm){
+    private FormValidation validateTripForm(SearchForm searchForm){
         String errorMessage = "";
         if (searchForm.getDate1() == null || searchForm.getDate2() == null){
             errorMessage = "Select 2 dates";
         }
-
         return new FormValidation(errorMessage, errorMessage.isBlank());
     }
 
-    private List<Trip> processTripFormAndGetResults(SearchForm searchForm){
+    private List<Trip> getTripResults(SearchForm searchForm){
         LocalDate date1 = searchForm.getDate1();
         LocalDate date2 = searchForm.getDate2();
-        List<Trip> results = tripService.findByDateAfterAndDateBeforeOrderByDate(date1, date2);
+        List<Trip> results = tripService.findByDateBetweenOrderByDate(date1, date2);
         return results;
     }
-
 
 }
