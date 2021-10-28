@@ -2,6 +2,7 @@ package mt.spacewebapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.extern.slf4j.Slf4j;
+import mt.spacewebapp.models.enums.TicketStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ public class Trip {
     private LocalDate date;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trip", fetch = FetchType.EAGER)
     private List<Ticket> tickets;
 
     private int plannedNumberOfPassengers;
@@ -49,12 +50,14 @@ public class Trip {
 
     public boolean isAvailable(){
         int available = getNumberOfTicketsAvailable();
-        log.debug(String.format("trip %d: %d available", id, available));
         return available > 0;
     }
 
     public int getNumberOfTicketsAvailable() {
-        return plannedNumberOfPassengers - tickets.size();
+        long numOfValidTickets = tickets.stream()
+                .filter(t -> t.getStatus() == TicketStatus.VALID)
+                .count();
+        return plannedNumberOfPassengers - (int)numOfValidTickets;
     }
 
 
