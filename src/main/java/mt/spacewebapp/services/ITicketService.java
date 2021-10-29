@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface ITicketService {
     List<Ticket> findAll();
     Optional<Ticket> findById(String id);
+    int countByTicketStatusValidAndTripId(Integer id);
 
     Ticket save(Ticket ticket);
     boolean setTicketStatusById(String id, TicketStatus status);

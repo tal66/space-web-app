@@ -13,5 +13,7 @@ public interface ITripService {
     List<Trip> findByDestination(Destination destination);
     List<Trip> findByDateBetweenOrderByDate(LocalDate date1, LocalDate date2);
 
-    List<Trip> availableTripsToDestination(Destination destination);
+    List<Trip> getAvailableTripsToDestination(Destination destination);
+    boolean hasAvailableTickets (Trip trip);
+    int getNumberOfTicketsAvailable(Trip trip);
 }

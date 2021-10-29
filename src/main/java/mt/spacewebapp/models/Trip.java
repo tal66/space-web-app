@@ -30,12 +30,10 @@ public class Trip {
     private LocalDate date;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "trip", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
     private List<Ticket> tickets;
 
     private int plannedNumberOfPassengers;
-    @Transient
-    private int numberOfTicketsAvailable;
 
     public Trip() {
         this.plannedNumberOfPassengers = DEFAULT_PLANNED_NUMBER_OF_PASSENGERS;
@@ -48,17 +46,13 @@ public class Trip {
         this.plannedNumberOfPassengers = DEFAULT_PLANNED_NUMBER_OF_PASSENGERS;
     }
 
-    public boolean isAvailable(){
-        int available = getNumberOfTicketsAvailable();
-        return available > 0;
-    }
 
-    public int getNumberOfTicketsAvailable() {
-        long numOfValidTickets = tickets.stream()
-                .filter(t -> t.getStatus() == TicketStatus.VALID)
-                .count();
-        return plannedNumberOfPassengers - (int)numOfValidTickets;
-    }
+//    public int getNumberOfTicketsAvailable() {
+//        long numOfValidTickets = tickets.stream()
+//                .filter(t -> t.getStatus() == TicketStatus.VALID)
+//                .count();
+//        return plannedNumberOfPassengers - (int)numOfValidTickets;
+//    }
 
 
     @Override

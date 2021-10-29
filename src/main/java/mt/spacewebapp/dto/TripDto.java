@@ -10,5 +10,5 @@ public class TripDto {
     private String toDestinationName;
     private LocalDate date;
     private int plannedNumberOfPassengers;
-    private int numberOfTicketsAvailable;
+//    private int numberOfTicketsAvailable;
 }

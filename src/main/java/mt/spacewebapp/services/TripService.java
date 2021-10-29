@@ -16,17 +16,32 @@ import java.util.stream.Collectors;
 public class TripService implements ITripService {
 
     private TripRepository tripRepository;
+    private ITicketService ticketService;
 
-    public TripService(TripRepository tripRepository) {
+    public TripService(TripRepository tripRepository, ITicketService ticketService) {
         this.tripRepository = tripRepository;
+        this.ticketService = ticketService;
     }
 
     @Override
-    public List<Trip> availableTripsToDestination(Destination destination){
+    public List<Trip> getAvailableTripsToDestination(Destination destination){
         List<Trip> tripList = findByDestination(destination);
-        List<Trip> availableTripList = tripList.stream()
-                .filter(Trip::isAvailable).collect(Collectors.toList());
-        return availableTripList;
+        List<Trip> availableTrips = tripList.stream()
+                .filter(this::hasAvailableTickets)
+                .collect(Collectors.toList());
+        return availableTrips;
+    }
+
+    @Override
+    public boolean hasAvailableTickets (Trip trip){
+        return getNumberOfTicketsAvailable(trip) > 0;
+    }
+
+    @Override
+    public int getNumberOfTicketsAvailable(Trip trip){
+        int capacity = trip.getPlannedNumberOfPassengers();
+        int sold = ticketService.countByTicketStatusValidAndTripId(trip.getId());
+        return capacity - sold;
     }
 
     @Override

@@ -124,7 +124,7 @@ public class TicketController {
         model.addAttribute("ticket", dtoUtil.map(ticketService.create(), TicketDto.class));
         model.addAttribute("classOptions", ticketService.ticketClassOptions());
 
-        List<Trip> trips = tripService.availableTripsToDestination(destination);
+        List<Trip> trips = tripService.getAvailableTripsToDestination(destination);
         model.addAttribute("trips", dtoUtil.mapList(trips, TripDto.class));
         return "destination";
     }

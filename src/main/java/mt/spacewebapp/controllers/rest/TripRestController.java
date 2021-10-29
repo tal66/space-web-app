@@ -1,5 +1,6 @@
 package mt.spacewebapp.controllers.rest;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.controllers.shared.DtoUtil;
 import mt.spacewebapp.dto.TripDto;
@@ -26,19 +27,36 @@ public class TripRestController {
     @GetMapping
     public List<TripDto> getAllTrips(){
         List<Trip> trips = tripService.findAll();
-        List<TripDto> tripDtos = dtoUtil.mapList(trips, TripDto.class);
-        return tripDtos;
+        return dtoUtil.mapList(trips, TripDto.class);
     }
 
     @GetMapping("/{id}")
-    public TripDto get(@PathVariable Integer id){
+    public TripDto getTrip(@PathVariable Integer id){
         log.info("api call: get trip " + id);
         Trip trip = tripService.findById(id).get();
-        TripDto tripDto = dtoUtil.map(trip, TripDto.class);
-        return tripDto;
+        return dtoUtil.map(trip, TripDto.class);
     }
 
+    @GetMapping("/{id}/stats")
+    public Object getTripStats(@PathVariable Integer id){
+        Trip trip = tripService.findById(id).get();
 
+        int numberOfTicketsAvailable = tripService.getNumberOfTicketsAvailable(trip);
+        int plannedNumberOfPassengers = trip.getPlannedNumberOfPassengers();
+        return new TripStats(numberOfTicketsAvailable, plannedNumberOfPassengers);
+    }
 
+    @Getter
+    private class TripStats{
+        private int plannedNumberOfPassengers;
+        private int numberOfTicketsAvailable;
+        private int numberOfTicketsSold;
+
+        TripStats(int numberOfTicketsAvailable, int plannedNumberOfPassengers) {
+            this.numberOfTicketsAvailable = numberOfTicketsAvailable;
+            this.plannedNumberOfPassengers = plannedNumberOfPassengers;
+            this.numberOfTicketsSold = plannedNumberOfPassengers - numberOfTicketsAvailable;
+        }
+    }
 
 }
