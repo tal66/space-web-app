@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class DestinationController {
 
     @Autowired
-    DtoUtil dtoUtil;
+    private DtoUtil dtoUtil;
     private IDestinationService destinationService;
 
     public DestinationController(IDestinationService destinationService) {

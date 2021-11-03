@@ -29,20 +29,26 @@ public class TicketRestController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<TicketDto> getAllTickets(){
+    public SimpleResponseWrapper<List<TicketDto>> getAllTickets(){
         log.info("api call: get all tickets");
-        List<Ticket> tickets = ticketService.findAll();
-        return dtoUtil.mapList(tickets, TicketDto.class);
+        List<Ticket> tickets = ticketService.findAllOrderByTripId();
+        List<TicketDto> ticketDtos = dtoUtil.mapList(tickets, TicketDto.class);
+
+        return new SimpleResponseWrapper(ticketDtos,
+                tickets.size() + " tickets");
     }
 
     @GetMapping("/{id}")
-    public TicketDto getById(@PathVariable String id){
-        log.info("api call: get ticket " + id);
+    public SimpleResponseWrapper<TicketDto> getById(@PathVariable String id){
+        log.info(String.format("api call: get ticket __ %s __", id));
+
         Optional<Ticket> ticket = ticketService.findById(id);
         if (ticket.isEmpty()){
-            return null;
+            return new SimpleResponseWrapper("ticket not found");
         }
-        return dtoUtil.map(ticket.get(), TicketDto.class);
+
+        TicketDto ticketDto = dtoUtil.map(ticket.get(), TicketDto.class);
+        return new SimpleResponseWrapper(ticketDto);
     }
 
 }

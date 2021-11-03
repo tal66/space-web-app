@@ -3,8 +3,7 @@ package mt.spacewebapp.models.enums;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Converter
 public class TicketStatusConverter implements AttributeConverter<TicketStatus, Integer> {
@@ -15,12 +14,12 @@ public class TicketStatusConverter implements AttributeConverter<TicketStatus, I
 
     @Override
     public TicketStatus convertToEntityAttribute(Integer integer) {
-        List<TicketStatus> list = Arrays.stream(TicketStatus.values())
+        Optional<TicketStatus> optional = Arrays.stream(TicketStatus.values())
                 .filter(s -> s.getValue() == integer)
-                .collect(Collectors.toList());
-        if (list.isEmpty()){
+                .findFirst();
+        if (optional.isEmpty()){
             return null;
         }
-        return list.get(0);
+        return optional.get();
     }
 }

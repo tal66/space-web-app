@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Space Vacation</title>
+    <link rel="stylesheet"  href="/style.css">
+</head>
+
+<body>
+    <div th:insert="fragments/navbar.html"> </div>
+    <br>
+    <div class="main">
+        <div>Error</div>
+        <div th:if="${message != null}" th:text="${message}"></div>
+        <div th:if="${message == null || message.isEmpty()}">try to refresh the page</div>
+    </div>
+
+</body>
+
+</html>

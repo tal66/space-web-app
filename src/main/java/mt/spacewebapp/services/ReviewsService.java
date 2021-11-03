@@ -3,6 +3,8 @@ package mt.spacewebapp.services;
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.ReviewsRepository;
 import mt.spacewebapp.models.Review;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +14,10 @@ import java.util.List;
 @Slf4j
 public class ReviewsService {
     private ReviewsRepository reviewsRepository;
-    private CacheService cacheService;
     private int DEFAULT_STARS = 5;
 
-    public ReviewsService(ReviewsRepository reviewsRepository, CacheService cacheService) {
+    public ReviewsService(ReviewsRepository reviewsRepository) {
         this.reviewsRepository = reviewsRepository;
-        this.cacheService = cacheService;
     }
 
     public Review create(){
@@ -26,15 +26,15 @@ public class ReviewsService {
         return newReview;
     }
 
-
-    @Cacheable("reviews")
-    public List<Review> findAll(){
-        return reviewsRepository.findAll();
-    }
-
+    @CacheEvict(value = "reviews", allEntries = true)
     public Review save(Review review){
-        cacheService.evictCacheValues("reviews");
+        log.info("saving review");
         return reviewsRepository.save(review);
     }
 
+    @Cacheable(value = "reviews")
+    public List<Review> findAll(){
+        List<Review> reviews = reviewsRepository.findAll();
+        return reviews;
+    }
 }

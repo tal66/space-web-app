@@ -1,6 +1,6 @@
 <form style="" action="#" th:action="@{/news}" th:object="${newArticle}" method="POST" >
     <p><strong>Headline:</strong><br>
-        <input type="text" th:field="*{headline}" style="width: 100%">
+        <input type="text" th:field="*{headline}" style="width: 100%" required>
     </p>
 
     <p><strong>Text:</strong><br>

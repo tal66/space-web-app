@@ -100,7 +100,6 @@ public class DestinationService implements IDestinationService {
         return this.allDestinations;
     }
 
-    @PostConstruct
     @Scheduled(fixedRate = 1000 * 60 * 15)
     private void updateDestinationsMemberVariables(){
         this.allDestinations = destinationRepository.findAll();

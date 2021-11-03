@@ -32,7 +32,7 @@
 
                 <div th:each="i: ${#numbers.sequence(reviews.size() - 1, 0, -1)}" class="article">
                     <h3 th:text="${reviews[i].headline}" style="margin: 0;"></h3>
-                    <p th:text="${reviews[i].dateCreated + ', ' + reviews[i].customer?.firstName}" style="font-size: 14px;color: gray;"></p>
+                    <p th:text="${reviews[i].dateCreated + ', ' + reviews[i].customerFirstName}" style="font-size: 14px;color: gray;"></p>
                     <p th:text="${reviews[i].stars + ' stars '}" style="display: inline-block; margin: 0; margin-inline-end: 4px">
                     <p th:each="i: ${#numbers.sequence(reviews[i].stars - 1, 0, -1)}" style="display: inline-block; margin: 0">
                         <span class="fa fa-star checked"></span>

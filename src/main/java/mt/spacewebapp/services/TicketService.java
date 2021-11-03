@@ -35,7 +35,11 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public boolean setTicketStatusById(String id, TicketStatus status){
+    public boolean cancelTicket(String id){
+        return setTicketStatusById(id, TicketStatus.CANCELED_BY_CLIENT);
+    }
+
+    private boolean setTicketStatusById(String id, TicketStatus status){
         Optional<Ticket> ticketOptional = findById(id);
         if (ticketOptional.isEmpty()){
             return false;
@@ -61,8 +65,8 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public List<Ticket> findAll(){
-        return ticketRepository.findAll();
+    public List<Ticket> findAllOrderByTripId(){
+        return ticketRepository.findAllByOrderByTripId();
     }
 
     @Override
@@ -74,8 +78,12 @@ public class TicketService implements ITicketService {
 
     @Override
     public Optional<Ticket> findById(String id) {
-        UUID uuid = UUID.fromString(id);
-        return ticketRepository.findById(uuid);
+        try {
+            UUID uuid = UUID.fromString(id);
+            return ticketRepository.findById(uuid);
+        } catch (IllegalArgumentException e){
+            return Optional.empty();
+        }
     }
 
 }

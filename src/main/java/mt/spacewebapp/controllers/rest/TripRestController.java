@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/trips")
@@ -25,25 +26,37 @@ public class TripRestController {
 
 
     @GetMapping
-    public List<TripDto> getAllTrips(){
+    public SimpleResponseWrapper<List<TripDto>> getAllTrips(){
         List<Trip> trips = tripService.findAll();
-        return dtoUtil.mapList(trips, TripDto.class);
+        List<TripDto> tripDtos = dtoUtil.mapList(trips, TripDto.class);
+        return new SimpleResponseWrapper(tripDtos,
+                trips.size() + " trips");
     }
 
     @GetMapping("/{id}")
-    public TripDto getTrip(@PathVariable Integer id){
-        log.info("api call: get trip " + id);
-        Trip trip = tripService.findById(id).get();
-        return dtoUtil.map(trip, TripDto.class);
+    public SimpleResponseWrapper<TripDto> getTrip(@PathVariable Integer id){
+        log.info(String.format("api call: get trip __ %s __", id));
+        Optional<Trip> trip = tripService.findById(id);
+        if (trip.isEmpty()){
+            return new SimpleResponseWrapper("trip not found");
+        }
+
+        TripDto tripDto = dtoUtil.map(trip.get(), TripDto.class);
+        return new SimpleResponseWrapper(tripDto);
     }
 
     @GetMapping("/{id}/stats")
-    public Object getTripStats(@PathVariable Integer id){
-        Trip trip = tripService.findById(id).get();
+    public SimpleResponseWrapper<TripStats> getTripStats(@PathVariable Integer id){
+        Optional<Trip> trip = tripService.findById(id);
+        if (trip.isEmpty()){
+            return new SimpleResponseWrapper("trip not found");
+        }
 
-        int numberOfTicketsAvailable = tripService.getNumberOfTicketsAvailable(trip);
-        int plannedNumberOfPassengers = trip.getPlannedNumberOfPassengers();
-        return new TripStats(numberOfTicketsAvailable, plannedNumberOfPassengers);
+        int numberOfTicketsAvailable = tripService.getNumberOfTicketsAvailable(trip.get());
+        int plannedNumberOfPassengers = trip.get().getPlannedNumberOfPassengers();
+        TripStats stats = new TripStats(numberOfTicketsAvailable, plannedNumberOfPassengers);
+
+        return new SimpleResponseWrapper(stats);
     }
 
     @Getter

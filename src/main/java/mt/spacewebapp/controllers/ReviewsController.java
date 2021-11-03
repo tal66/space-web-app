@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.controllers.shared.DtoUtil;
 import mt.spacewebapp.dto.ReviewDto;
 import mt.spacewebapp.models.Review;
-import mt.spacewebapp.services.CustomerService;
 import mt.spacewebapp.services.ICustomerService;
 import mt.spacewebapp.services.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class ReviewsController {
     @Autowired
-    DtoUtil dtoUtil;
+    private DtoUtil dtoUtil;
     private ReviewsService reviewsService;
     private ICustomerService customerService;
 
@@ -33,14 +32,14 @@ public class ReviewsController {
         this.customerService = customerService;
     }
 
-    @ModelAttribute
-    public void addAttributes(Model model) {
+    private void addReviewsAttributes(Model model) {
         List<Review> reviews = reviewsService.findAll();
         model.addAttribute("reviews", dtoUtil.mapList(reviews, ReviewDto.class));
     }
 
     @GetMapping("/reviews")
     public String reviews(Model model){
+        addReviewsAttributes(model);
         return "reviews";
     }
 
@@ -51,6 +50,7 @@ public class ReviewsController {
         newReview.setCustomer(customerService.findByUserName(authentication.getName()));
         model.addAttribute("newReview", dtoUtil.map(newReview, ReviewDto.class));
         model.addAttribute("showReviewForm", true);
+        addReviewsAttributes(model);
         return "reviews";
     }
 
@@ -58,7 +58,6 @@ public class ReviewsController {
     public String submitReview(Model model, @Valid @ModelAttribute ReviewDto reviewDto, BindingResult errors, Authentication authentication){
         if (errors.hasErrors()){
             log.info(errors.toString());
-            model.addAttribute("errors", errors.getFieldErrors());
             model.addAttribute("showReviewForm", true);
             model.addAttribute("newReview", reviewDto);
         } else {
@@ -66,7 +65,7 @@ public class ReviewsController {
             review.setCustomer(customerService.findByUserName(authentication.getName()));
             reviewsService.save(review);
         }
-        addAttributes(model);
+        addReviewsAttributes(model);
         return "reviews";
     }
 

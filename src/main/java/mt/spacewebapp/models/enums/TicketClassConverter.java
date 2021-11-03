@@ -2,30 +2,26 @@ package mt.spacewebapp.models.enums;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Converter
 public class TicketClassConverter implements AttributeConverter<TicketClass, Integer> {
 
     @Override
     public Integer convertToDatabaseColumn(TicketClass ticketClass) {
-        switch (ticketClass) {
-            case First:
-                return 1;
-            case Economy:
-                return 2;
-        }
-        return null;
+        return ticketClass.getValue();
     }
 
     @Override
     public TicketClass convertToEntityAttribute(Integer integer) {
-        switch (integer) {
-            case 1:
-                return TicketClass.First;
-            case 2:
-                return TicketClass.Economy;
+        Optional<TicketClass> optional = Arrays.stream(TicketClass.values())
+                .filter(s -> s.getValue() == integer)
+                .findFirst();
+        if (optional.isEmpty()){
+            return null;
         }
-        return null;
+        return optional.get();
     }
 
 

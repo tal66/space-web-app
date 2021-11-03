@@ -36,7 +36,8 @@
 
                 <p><strong>Select Class:</strong>
                 <select th:field="*{ticketClass}">
-                    <option th:each="c: ${classOptions}" th:value="${c}" th:text="${c}" >class option</option>
+                    <option th:each="c: ${classOptions}" th:value="${#strings.toUpperCase(c)}"
+                            th:text="${#strings.capitalize(c)}" >class option</option>
                 </select>
 
                 </p>

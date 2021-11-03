@@ -13,7 +13,6 @@ public interface IDestinationService {
     Map<String, List<Destination>> destinationsByTypeMap();
 
     List<Destination> searchByFieldGreaterThan(Double num, String field);
-
     SearchForm createSearchByNumbersForm();
     List<Option> getSearchOptionsForNumbersForm();
 }

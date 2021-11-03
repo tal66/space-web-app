@@ -32,13 +32,17 @@ public class UserRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{username}/tickets")
-    public List<TicketDto> get(@PathVariable String username, Authentication authentication){
-        log.info("api call: get tickets for user " + username);
+    public SimpleResponseWrapper<List<TicketDto>> get(@PathVariable String username, Authentication authentication){
+        log.info(String.format("api call: get tickets for user __ %s __", username));
         if (!username.equals(authentication.getName())){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "mismatch bet. authenticated and requested username");
+            String message = "authenticated username and requested username do not match";
+            log.error(message);
+            return new SimpleResponseWrapper (message);
         }
         List<Ticket> tickets = customerService.getUserTickets(authentication.getName());
-        return dtoUtil.mapList(tickets, TicketDto.class);
+        List<TicketDto> ticketDtos = dtoUtil.mapList(tickets, TicketDto.class);
+        return new SimpleResponseWrapper(ticketDtos,
+                tickets.size() + " tickets");
     }
 
 }

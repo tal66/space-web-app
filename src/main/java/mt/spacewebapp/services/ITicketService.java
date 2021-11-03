@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITicketService {
-    List<Ticket> findAll();
+    List<Ticket> findAllOrderByTripId();
     Optional<Ticket> findById(String id);
     int countByTicketStatusValidAndTripId(Integer id);
 
     Ticket save(Ticket ticket);
-    boolean setTicketStatusById(String id, TicketStatus status);
+    boolean cancelTicket(String id);
     Ticket create();
 
     TicketClass[] ticketClassOptions();

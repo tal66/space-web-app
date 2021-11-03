@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class NewsController {
     @Autowired
-    DtoUtil dtoUtil;
+    private DtoUtil dtoUtil;
     private NewsService newsService;
 
     public NewsController(NewsService newsService) {
@@ -41,7 +41,6 @@ public class NewsController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @CacheEvict(value = "news_articles", allEntries = true)
     @PostMapping(value="/news", params = "add-news")
     public String showFormAddNewsArticle(Model model){
         model.addAttribute("newArticle", new NewsArticleDto());

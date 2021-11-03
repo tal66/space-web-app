@@ -10,7 +10,6 @@ import mt.spacewebapp.models.Customer;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.Trip;
-import mt.spacewebapp.models.enums.TicketStatus;
 import mt.spacewebapp.models.forms.FormValidation;
 import mt.spacewebapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,14 +47,16 @@ public class TicketController {
     @PreAuthorize("isAuthenticated()")
     public String book(@Valid @ModelAttribute TicketDto ticketDto, BindingResult errors, Model model, Authentication authentication) {
         if (errors.hasErrors()) {
+            log.warn("booking binding error");
             return "error";
         }
+
         Ticket ticket = toTicket(ticketDto);
         ticket.setCustomer(customerService.findByUserName(authentication.getName()));
         Ticket savedTicket = ticketService.save(ticket);
         log.info("saved: " + savedTicket);
 
-        model.addAttribute("ticket", dtoUtil.map(ticket, TicketDto.class));
+        model.addAttribute("ticket", dtoUtil.map(savedTicket, TicketDto.class));
         return "booking";
     }
 
@@ -71,7 +72,8 @@ public class TicketController {
     @GetMapping("my_tickets")
     public String myTickets(Model model, Authentication authentication){
         List<Ticket> tickets = customerService.getUserTickets(authentication.getName());
-        model.addAttribute("tickets", dtoUtil.mapList(tickets, TicketDto.class));
+        List<TicketDto> ticketDtos = dtoUtil.mapList(tickets, TicketDto.class);
+        model.addAttribute("tickets", ticketDtos);
         return "my_tickets";
     }
 
@@ -82,7 +84,7 @@ public class TicketController {
         String message;
 
         if (formValidation.isValid()){
-            ticketService.setTicketStatusById(id, TicketStatus.CANCELED_BY_CLIENT);
+            ticketService.cancelTicket(id);
             message = "canceled order: " + id;
         } else {
             message = formValidation.getErrorMessage();
@@ -94,22 +96,25 @@ public class TicketController {
 
     private FormValidation validateCancelTicketRequest(String id, Authentication authentication){
         String message = "";
+        String errorMessage = "ERROR: ticket not found " + id;
 
         try {
             UUID.fromString(id);
         } catch (IllegalArgumentException e){
-            message = "ERROR: invalid UUID " + id;
-            return new FormValidation(message, false);
+            log.error(String.format("invalid ticket UUID __ %s __", id));
+            return new FormValidation(errorMessage, false);
         }
 
         Optional<Ticket> ticketOptional = ticketService.findById(id);
         if (ticketOptional.isEmpty()){
-            message = "ERROR: not found " + id;
+            message = errorMessage;
+            log.error(String.format("ticket not found __ %s __", id));
         } else {
             Customer ticketCustomer = ticketOptional.get().getCustomer();
             String authUsername = authentication.getName();
             if (!ticketCustomer.getUserName().equals(authUsername)){
-                message = "ERROR: not authorized to edit " + id;
+                message = errorMessage;
+                log.error(String.format("not authorized to cancel ticket. username: %s , ticket: __ %s __", authUsername, id));
             }
         }
 
@@ -117,8 +122,14 @@ public class TicketController {
     }
 
     @GetMapping("destination/{destinationName}")
-    public String destinationInfoAndBookingForm(Model model, @PathVariable(value="destinationName") String destinationName, Authentication authentication){
+    public String destinationInfoAndBookingForm(Model model, @PathVariable(value="destinationName") String destinationName,
+                                                Authentication authentication){
         Destination destination = destinationService.findByName(destinationName);
+        if (destination == null){
+            model.addAttribute("message", "destination not found.");
+            return "error";
+        }
+
         model.addAttribute("destination", dtoUtil.map(destination, DestinationDto.class));
         model.addAttribute("isLoggedIn", authentication != null);
         model.addAttribute("ticket", dtoUtil.map(ticketService.create(), TicketDto.class));

@@ -11,4 +11,5 @@ import java.util.UUID;
 
 public interface TicketRepository extends JpaRepository<Ticket, UUID>, JpaSpecificationExecutor<Ticket> {
     List<Ticket> findByCustomer(Customer customer);
+    List<Ticket> findAllByOrderByTripId();
 }

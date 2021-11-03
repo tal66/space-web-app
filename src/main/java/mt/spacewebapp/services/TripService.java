@@ -23,7 +23,7 @@ public class TripService implements ITripService {
         this.ticketService = ticketService;
     }
 
-    @Override
+    @Override //  n+1
     public List<Trip> getAvailableTripsToDestination(Destination destination){
         List<Trip> tripList = findByDestination(destination);
         List<Trip> availableTrips = tripList.stream()
