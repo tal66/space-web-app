@@ -1,8 +1,9 @@
-package mt.spacewebapp.services;
+package mt.spacewebapp.services.impl;
 
 import mt.spacewebapp.data.CustomerRepository;
 import mt.spacewebapp.models.Customer;
 import mt.spacewebapp.models.Ticket;
+import mt.spacewebapp.services.ICustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

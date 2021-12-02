@@ -44,23 +44,16 @@ public class SearchController {
 
     @PostMapping(value = "/search", params = "search-dest")
     public String destinationSearchResults(Model model, @Valid @ModelAttribute SearchForm searchForm, BindingResult errors){
-        searchForm.setOptions(destinationService.getSearchOptionsForNumbersForm());
+        searchForm.setOptions(destinationService.createSearchByNumbersForm().getOptions());
         model.addAttribute("searchDestForm", searchForm);
         FormValidation formValidation = validateDestinationForm(searchForm, errors);
         if (formValidation.isValid()){
             List<Destination> results = getDestinationResults(searchForm);
             model.addAttribute("destResults", dtoUtil.mapList(results, DestinationDto.class));
-            log.info("search results: " + results.size());
         } else {
             model.addAttribute("errorMessage", formValidation.getErrorMessage());
         }
         return "search";
-    }
-
-    @PostMapping(value = "api/search/destination*")
-    @ResponseBody
-    public List<Destination> destinationSearchResultsApi(@RequestParam String option, @RequestParam Double number){
-        return destinationService.searchByFieldGreaterThan(number, option);
     }
 
     private FormValidation validateDestinationForm(SearchForm searchForm, BindingResult errors){
@@ -85,7 +78,7 @@ public class SearchController {
         String selectedField = searchForm.getSelectedOption();
         String userText = searchForm.getUserText();
         double userNumber = Double.parseDouble(userText.replace(",",""));
-        List<Destination> results = destinationService.searchByFieldGreaterThan(userNumber, selectedField);
+        List<Destination> results = destinationService.searchDestinationByFieldGreaterThan(userNumber, selectedField);
         return results;
     }
 

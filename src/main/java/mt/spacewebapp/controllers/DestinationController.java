@@ -27,7 +27,7 @@ public class DestinationController {
         this.destinationService = destinationService;
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", "/home"})
     public String destinationsByType(Model model) {
         Map<String, List<Destination>> destinationsByTypeMap = destinationService.destinationsByTypeMap();
         Map<String, List<DestinationDto>> destinationsDtoByType = destinationsByTypeMap

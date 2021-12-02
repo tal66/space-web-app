@@ -13,10 +13,12 @@ const fetchResults = async (queryOption, queryNumber) => {
     if (fromStorage){
         return fromStorage;
     }
-    let url = `${location.origin}/api/search/destination?option=${queryOption}&number=${queryNumber}`;
-    let response = await fetch(url, {method: 'POST'});
-    let json = await response.json().catch((e) => {return null});
-    saveInStorage(queryOption+queryNumber, json);
+    let url = `${location.origin}/api/search/destinations?option=${queryOption}&gt=${queryNumber}`;
+    let response = await fetch(url);
+    let json = await response.json().catch((e) => {console.log(e); return null});
+    if (json != null){
+        saveInStorage(queryOption+queryNumber, json);
+    }
     return json;
 }
 

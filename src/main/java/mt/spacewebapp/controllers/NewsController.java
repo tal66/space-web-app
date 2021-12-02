@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.controllers.shared.DtoUtil;
 import mt.spacewebapp.dto.NewsArticleDto;
 import mt.spacewebapp.models.NewsArticle;
-import mt.spacewebapp.services.NewsService;
+import mt.spacewebapp.services.INewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +22,9 @@ import java.util.List;
 public class NewsController {
     @Autowired
     private DtoUtil dtoUtil;
-    private NewsService newsService;
+    private INewsService newsService;
 
-    public NewsController(NewsService newsService) {
+    public NewsController(INewsService newsService) {
         this.newsService = newsService;
     }
 

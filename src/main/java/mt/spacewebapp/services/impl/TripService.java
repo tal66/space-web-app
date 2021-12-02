@@ -1,9 +1,11 @@
-package mt.spacewebapp.services;
+package mt.spacewebapp.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.TripRepository;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Trip;
+import mt.spacewebapp.services.ITicketService;
+import mt.spacewebapp.services.ITripService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

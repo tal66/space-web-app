@@ -1,4 +1,4 @@
-package mt.spacewebapp.services;
+package mt.spacewebapp.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.TicketRepository;
@@ -6,6 +6,7 @@ import mt.spacewebapp.data.Specs.TicketSpecs;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.enums.TicketClass;
 import mt.spacewebapp.models.enums.TicketStatus;
+import mt.spacewebapp.services.ITicketService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 

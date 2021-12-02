@@ -5,7 +5,7 @@ import mt.spacewebapp.controllers.shared.DtoUtil;
 import mt.spacewebapp.dto.ReviewDto;
 import mt.spacewebapp.models.Review;
 import mt.spacewebapp.services.ICustomerService;
-import mt.spacewebapp.services.ReviewsService;
+import mt.spacewebapp.services.IReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -24,10 +24,10 @@ import java.util.List;
 public class ReviewsController {
     @Autowired
     private DtoUtil dtoUtil;
-    private ReviewsService reviewsService;
+    private IReviewsService reviewsService;
     private ICustomerService customerService;
 
-    public ReviewsController(ReviewsService reviewsService, ICustomerService customerService) {
+    public ReviewsController(IReviewsService reviewsService, ICustomerService customerService) {
         this.reviewsService = reviewsService;
         this.customerService = customerService;
     }

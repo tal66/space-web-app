@@ -1,14 +1,14 @@
-package mt.spacewebapp.services;
+package mt.spacewebapp.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.DestinationRepository;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.forms.Option;
 import mt.spacewebapp.models.forms.SearchForm;
+import mt.spacewebapp.services.IDestinationService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,17 +29,17 @@ public class DestinationService implements IDestinationService {
     }
 
     @Override
-    public List<Destination> searchByFieldGreaterThan(Double num, String field){
+    public List<Destination> searchDestinationByFieldGreaterThan(Double num, String field){
         try {
-            return destinationsWithFieldGreaterThan(num, field);
+            return getDestinationsWithFieldGreaterThan(num, field);
         } catch (Exception e){
-            log.info("results exception " + e);
+            log.error("results exception " + e);
             return null;
         }
     }
 
     // not optimal. done this way for learning purposes
-    private List<Destination> destinationsWithFieldGreaterThan(Double num, String field){
+    private List<Destination> getDestinationsWithFieldGreaterThan(Double num, String field){
         Method getter = fieldToGetter(field);
         List<Destination> result = allDestinations.stream()
                 .filter(dest -> invokeMethod(getter, dest) > num)
@@ -74,8 +74,7 @@ public class DestinationService implements IDestinationService {
         return searchForm;
     }
 
-    @Override
-    public List<Option> getSearchOptionsForNumbersForm(){
+    private List<Option> getSearchOptionsForNumbersForm(){
         return List.of(
                 new Option("radius_km", "Radius (km)"),
                 new Option("orbitPeriod_earthYears", "Orbit Period (Earth Years)"),
@@ -91,7 +90,7 @@ public class DestinationService implements IDestinationService {
 
     @Override
     public Destination findByName(String name){
-        return destinationRepository.findByName(name);
+        return destinationRepository.findByNameIgnoreCase(name);
     }
 
 

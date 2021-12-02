@@ -12,7 +12,6 @@ public interface IDestinationService {
     Destination findByName(String name);
     Map<String, List<Destination>> destinationsByTypeMap();
 
-    List<Destination> searchByFieldGreaterThan(Double num, String field);
+    List<Destination> searchDestinationByFieldGreaterThan(Double num, String field);
     SearchForm createSearchByNumbersForm();
-    List<Option> getSearchOptionsForNumbersForm();
 }

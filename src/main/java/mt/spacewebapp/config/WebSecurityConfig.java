@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/resources/static/**", "/js/**", "/", "/reviews", "/news", "/destination/**", "/search/**", "/data", "/h2-console/**")
+                .antMatchers("/home", "/", "/reviews", "/news", "/destination/**", "/search/**", "/data", "/h2-console/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -41,7 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/resources/**", "/storage.js", "/*css", "/img*/**", "/h2-console/**", "/api/search/destination/**", "/api/trips/*");
+                .antMatchers("/resources/static/**", "/storage.js", "/js/**", "/*css", "/img*/**",
+                        "/api/search/destinations/**", "/api/destinations/*", "/api/trips/*");
     }
 
     @Bean
