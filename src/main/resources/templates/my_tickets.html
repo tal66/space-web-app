@@ -10,7 +10,7 @@
     <div th:insert="fragments/navbar.html"> </div>
     <div class="main">
         <h2>My Tickets</h2>
-        <div th:if="${tickets == null or tickets.isEmpty()}">No tickets found. Choose a destination from the homepage</div>
+        <div th:if="${tickets == null or tickets.isEmpty()}">No tickets found. Choose a destination from the <a th:href="@{'/'}">homepage</a></div>
 
         <div style="margin-left: 3%">
             <div th:each="ticket: ${tickets}" th:insert="fragments/ticket.html"> </div>

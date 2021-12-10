@@ -7,7 +7,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import java.util.UUID;
 
-@StaticMetamodel(Ticket.class)
+@StaticMetamodel(Ticket.class) // just trying this out
 public class Ticket_ {
     public static volatile SingularAttribute<Ticket, UUID> id;
     public static volatile SingularAttribute<Ticket, TicketClass> ticketClass;

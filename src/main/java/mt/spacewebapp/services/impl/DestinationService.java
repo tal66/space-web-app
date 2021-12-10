@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class DestinationService implements IDestinationService {
     private DestinationRepository destinationRepository;
     private List<Destination> allDestinations;
     private Map<String, List<Destination>> destinationsByType;
-    private LocalDateTime timeStamp;
+    private Instant timeStamp;
 
     public DestinationService(DestinationRepository destinationRepository) {
         this.destinationRepository = destinationRepository;
@@ -100,17 +101,17 @@ public class DestinationService implements IDestinationService {
     }
 
     @Scheduled(fixedRate = 1000 * 60 * 15)
-    private void updateDestinationsMemberVariables(){
+    private void updateDestinationsVariables(){
         this.allDestinations = destinationRepository.findAll();
         log.info("update allDestinations: " + this.allDestinations.size() + " destinations");
         this.destinationsByType = allDestinations.stream()
                 .collect(Collectors.groupingBy(d -> d.getType().toString()));
-        this.timeStamp = LocalDateTime.now();
+        this.timeStamp = Instant.now();
     }
 
     private boolean isCacheUpdated(int minutes){
         return (this.allDestinations != null
-                && LocalDateTime.now().minusMinutes(minutes).compareTo(this.timeStamp) < 0);
+                && Instant.now().minusSeconds(minutes * 60).compareTo(this.timeStamp) < 0);
     }
 
 }

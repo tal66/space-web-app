@@ -40,10 +40,10 @@ public class Trip {
     }
 
     public Trip(Destination from, Destination to, LocalDate date) {
+        this();
         this.from = from;
         this.to = to;
         this.date = date;
-        this.plannedNumberOfPassengers = DEFAULT_PLANNED_NUMBER_OF_PASSENGERS;
     }
 
 
@@ -64,24 +64,12 @@ public class Trip {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Destination getFrom() {
         return from;
     }
 
-    public void setFrom(Destination from) {
-        this.from = from;
-    }
-
     public Destination getTo() {
         return to;
-    }
-
-    public void setTo(Destination to) {
-        this.to = to;
     }
 
     public LocalDate getDate() {
@@ -94,10 +82,6 @@ public class Trip {
 
     public List<Ticket> getTickets() {
         return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
     }
 
     public int getPlannedNumberOfPassengers() {

@@ -9,13 +9,12 @@ features:
 - view or cancel booked tickets
 - rate and review trip
 - news page
-- API to view ticket info
+- API to view ticket, destination or trip info
 
 using H2 database (data is loaded on startup, stored in memory and will not persist)
 
 ## TODO:
+- move dto's to services
 - registration page
 - redirect after login if user tried to book
-- save seat for limited time
-- register to news updates
 - error handling

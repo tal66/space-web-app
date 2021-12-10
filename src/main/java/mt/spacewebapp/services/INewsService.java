@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface INewsService {
     NewsArticle create();
-
     NewsArticle save(NewsArticle article);
-
     List<NewsArticle> findAll();
 }

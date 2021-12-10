@@ -41,6 +41,7 @@
         status integer,
         customer_id integer,
         trip_id integer,
+        booking_date_time varchar(35),
         primary key (id),
         foreign key (customer_id) references customers,
         foreign key (trip_id) references trips
@@ -81,8 +82,5 @@
         foreign key (customer_id) references customers(customer_id)
     );
 
-    create index idx_orbit_distance
-    on destinations (avg_orbit_distance_km);
-
-    create index idx_radius
-    on destinations (radius_km);
+    create index idx_trip_date
+    on trips (trip_date);

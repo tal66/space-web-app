@@ -1,14 +1,14 @@
 package mt.spacewebapp.models;
 
 
-import mt.spacewebapp.models.Image;
-
+import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "news_articles")
+@ToString
 public class NewsArticle {
 
     @Id
@@ -50,16 +50,6 @@ public class NewsArticle {
         return false;
     }
 
-
-    @Override
-    public String toString() {
-        return "NewsArticle{" +
-                "id=" + id +
-                ", headline='" + headline + '\'' +
-                ", text='" + text + '\'' +
-                ", dateCreated=" + dateCreated +
-                '}';
-    }
 
     public Integer getId() {
         return id;

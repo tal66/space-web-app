@@ -26,7 +26,7 @@ public class TripService implements ITripService {
     }
 
     @Override //  n+1
-    public List<Trip> getAvailableTripsToDestination(Destination destination){
+    public List<Trip> findByDestinationIfAvailable(Destination destination){
         List<Trip> tripList = findByDestination(destination);
         List<Trip> availableTrips = tripList.stream()
                 .filter(this::hasAvailableTickets)
@@ -34,8 +34,7 @@ public class TripService implements ITripService {
         return availableTrips;
     }
 
-    @Override
-    public boolean hasAvailableTickets (Trip trip){
+    private boolean hasAvailableTickets (Trip trip){
         return getNumberOfTicketsAvailable(trip) > 0;
     }
 
@@ -46,8 +45,7 @@ public class TripService implements ITripService {
         return capacity - sold;
     }
 
-    @Override
-    public List<Trip> findByDestination(Destination destination){
+    private List<Trip> findByDestination(Destination destination){
         List<Trip> tripList = tripRepository.findByTo(destination);
         log.info(String.format("All Trips to %s: %d", destination.getName(), tripList.size()));
         return tripList;

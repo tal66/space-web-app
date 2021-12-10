@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.TicketRepository;
 import mt.spacewebapp.data.Specs.TicketSpecs;
 import mt.spacewebapp.models.Ticket;
-import mt.spacewebapp.models.enums.TicketClass;
 import mt.spacewebapp.models.enums.TicketStatus;
 import mt.spacewebapp.services.ITicketService;
 import org.springframework.data.jpa.domain.Specification;
@@ -60,10 +59,6 @@ public class TicketService implements ITicketService {
         return true;
     }
 
-    @Override
-    public TicketClass[] ticketClassOptions(){
-        return TicketClass.values();
-    }
 
     @Override
     public List<Ticket> findAllOrderByTripId(){
@@ -74,7 +69,7 @@ public class TicketService implements ITicketService {
     public int countByTicketStatusValidAndTripId(Integer id){
         return (int)ticketRepository.count(Specification
                 .where(TicketSpecs.whereTripId(id))
-                .and(TicketSpecs.isValid()));
+                .and(TicketSpecs.whereStatus(TicketStatus.VALID)));
     }
 
     @Override

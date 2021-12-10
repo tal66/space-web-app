@@ -10,6 +10,7 @@ import mt.spacewebapp.models.Customer;
 import mt.spacewebapp.models.Destination;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.Trip;
+import mt.spacewebapp.models.enums.TicketClass;
 import mt.spacewebapp.models.forms.FormValidation;
 import mt.spacewebapp.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,9 +134,9 @@ public class TicketController {
         model.addAttribute("destination", dtoUtil.map(destination, DestinationDto.class));
         model.addAttribute("isLoggedIn", authentication != null);
         model.addAttribute("ticket", dtoUtil.map(ticketService.create(), TicketDto.class));
-        model.addAttribute("classOptions", ticketService.ticketClassOptions());
+        model.addAttribute("classOptions", TicketClass.values());
 
-        List<Trip> trips = tripService.getAvailableTripsToDestination(destination);
+        List<Trip> trips = tripService.findByDestinationIfAvailable(destination);
         model.addAttribute("trips", dtoUtil.mapList(trips, TripDto.class));
         return "destination";
     }

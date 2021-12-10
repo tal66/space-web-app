@@ -17,4 +17,5 @@ public class TicketDto {
     private String tripDate;
     private String customerId;
     private String customerUsername;
+    private String bookingDateTime;
 }

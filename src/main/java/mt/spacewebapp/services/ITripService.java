@@ -10,10 +10,7 @@ import java.util.Optional;
 public interface ITripService {
     List<Trip> findAll();
     Optional<Trip> findById(Integer id);
-    List<Trip> findByDestination(Destination destination);
     List<Trip> findByDateBetweenOrderByDate(LocalDate date1, LocalDate date2);
-
-    List<Trip> getAvailableTripsToDestination(Destination destination);
-    boolean hasAvailableTickets (Trip trip);
+    List<Trip> findByDestinationIfAvailable(Destination destination);
     int getNumberOfTicketsAvailable(Trip trip);
 }

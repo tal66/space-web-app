@@ -1,11 +1,13 @@
 package mt.spacewebapp.models;
 
+import mt.spacewebapp.models.converters.InstantConverter;
 import mt.spacewebapp.models.enums.TicketClass;
-import mt.spacewebapp.models.enums.TicketClassConverter;
+import mt.spacewebapp.models.converters.TicketClassConverter;
 import mt.spacewebapp.models.enums.TicketStatus;
-import mt.spacewebapp.models.enums.TicketStatusConverter;
+import mt.spacewebapp.models.converters.TicketStatusConverter;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -24,12 +26,15 @@ public class Ticket {
     private TicketStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "tripId")
+    @JoinColumn(name = "trip_id")
     private Trip trip;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Convert(converter = InstantConverter.class)
+    private final Instant bookingDateTime = Instant.now();
 
 
     public Ticket() {
@@ -81,5 +86,9 @@ public class Ticket {
 
     public void setStatus(TicketStatus status) {
         this.status = status;
+    }
+
+    public Instant getBookingDateTime() {
+        return bookingDateTime;
     }
 }

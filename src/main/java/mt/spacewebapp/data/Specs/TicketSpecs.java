@@ -5,12 +5,7 @@ import mt.spacewebapp.models.Ticket_;
 import mt.spacewebapp.models.enums.TicketStatus;
 import org.springframework.data.jpa.domain.Specification;
 
-public class TicketSpecs {
-    public static Specification<Ticket> isValid(){
-        return (root, query, builder) -> {
-            return builder.equal(root.get(Ticket_.status), TicketStatus.VALID);
-        };
-    }
+public class TicketSpecs { // just trying this out
 
     public static Specification<Ticket> whereStatus(TicketStatus status){
         return (root, query, builder) -> {

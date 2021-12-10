@@ -1,7 +1,7 @@
 
 INSERT INTO Customers (FIRST_NAME, LAST_NAME, user_name, email, phone)
 VALUES
-('user', 'lastname', 'user', 'user@email.com', '123456'),
+('user', 'lastname', 'user1', 'user@email.com', '123456'),
 ('Neil', 'lastname', 'user2', 'user2@email.com', '223456'),
 ('Admin', 'lastname', 'admin', 'admin@email.com', '323456');
 

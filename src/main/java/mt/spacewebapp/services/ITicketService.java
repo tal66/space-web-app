@@ -12,9 +12,8 @@ public interface ITicketService {
     Optional<Ticket> findById(String id);
     int countByTicketStatusValidAndTripId(Integer id);
 
+    Ticket create();
     Ticket save(Ticket ticket);
     boolean cancelTicket(String id);
-    Ticket create();
 
-    TicketClass[] ticketClassOptions();
 }

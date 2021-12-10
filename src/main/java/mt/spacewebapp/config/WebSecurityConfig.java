@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/home", "/", "/reviews", "/news", "/destination/**", "/search/**", "/data", "/h2-console/**")
+                .antMatchers("/home", "/", "/reviews", "/news", "/destination/**", "/search/**", "/data")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/resources/static/**", "/storage.js", "/js/**", "/*css", "/img*/**",
-                        "/api/search/destinations/**", "/api/destinations/*", "/api/trips/*");
+                        "/api/search/destinations/**", "/api/destinations/*", "/api/trips/*", "/h2-console/**");
     }
 
     @Bean
@@ -50,8 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         User.UserBuilder users = User.withDefaultPasswordEncoder();
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(users.username("user")
-                .password("user")
+        manager.createUser(users.username("user1")
+                .password("user1")
                 .roles("USER")
                 .build());
         manager.createUser(users.username("admin")

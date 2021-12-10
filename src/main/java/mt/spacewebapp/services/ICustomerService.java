@@ -6,7 +6,7 @@ import mt.spacewebapp.models.Ticket;
 import java.util.List;
 
 public interface ICustomerService {
-    Customer findByUserName(String name);
 
+    Customer findByUserName(String name);
     List<Ticket> getUserTickets(String username);
 }
