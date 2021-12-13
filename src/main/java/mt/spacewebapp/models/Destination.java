@@ -1,6 +1,7 @@
 package mt.spacewebapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import mt.spacewebapp.models.enums.DestinationType;
 import mt.spacewebapp.models.converters.DestinationTypeConverter;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Destinations")
+@AllArgsConstructor
 public class Destination {
 
     @Id
@@ -17,9 +19,10 @@ public class Destination {
     private String name;
     @Convert(converter = DestinationTypeConverter.class)
     private DestinationType type;
+    private double radius_km;
     private long avgOrbitDistance_km;
     private double orbitPeriod_earthYears;
-    private double radius_km;
+
     private int meanTemperature_c;
     private String mainPic;
     @JsonIgnore

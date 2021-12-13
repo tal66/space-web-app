@@ -19,14 +19,9 @@ public class Customer{
     private String lastName;
     private String email;
     private String phone;
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
-    private List<Ticket> tickets;
-
 
     public Customer() {
     }
-
 
     public Long getId() {
         return id;
@@ -42,12 +37,6 @@ public class Customer{
 
     public String getUserName() {
         return userName;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets.stream()
-                .filter(t -> t.getStatus() == TicketStatus.VALID)
-                .collect(Collectors.toList());
     }
 
     public void setFirstName(String firstName) {

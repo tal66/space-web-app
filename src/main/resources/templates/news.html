@@ -33,7 +33,7 @@
                     <p th:text="${articles[i].dateCreated}" style="font-size: 11px;color: gray;"></p>
 
                     <p th:text="${articles[i].text}" style="white-space: pre-line"></p>
-                    <div th:each="image: ${articles[i].imageList}" >
+                    <div th:each="image: ${articles[i].images}" >
                         <img th:src="@{${image.address}}" style="object-fit: contain; max-height: unset; width: 80%">
                         <p th:text="${image.text}"></p>
                     </div>

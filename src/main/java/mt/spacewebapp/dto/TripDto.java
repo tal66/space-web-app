@@ -9,6 +9,6 @@ public class TripDto {
     private String fromDestinationName;
     private String toDestinationName;
     private LocalDate date;
-    private int plannedNumberOfPassengers;
-//    private int numberOfTicketsAvailable;
+    private int nTicketsSold;
+    private int nTicketsMax;
 }

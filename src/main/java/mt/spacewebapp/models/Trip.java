@@ -2,7 +2,6 @@ package mt.spacewebapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.extern.slf4j.Slf4j;
-import mt.spacewebapp.models.enums.TicketStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -33,10 +32,11 @@ public class Trip {
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
     private List<Ticket> tickets;
 
-    private int plannedNumberOfPassengers;
+    private int nTicketsSold;
+    private int nTicketsMax;
 
     public Trip() {
-        this.plannedNumberOfPassengers = DEFAULT_PLANNED_NUMBER_OF_PASSENGERS;
+        this.nTicketsMax = DEFAULT_PLANNED_NUMBER_OF_PASSENGERS;
     }
 
     public Trip(Destination from, Destination to, LocalDate date) {
@@ -45,15 +45,6 @@ public class Trip {
         this.to = to;
         this.date = date;
     }
-
-
-//    public int getNumberOfTicketsAvailable() {
-//        long numOfValidTickets = tickets.stream()
-//                .filter(t -> t.getStatus() == TicketStatus.VALID)
-//                .count();
-//        return plannedNumberOfPassengers - (int)numOfValidTickets;
-//    }
-
 
     @Override
     public String toString() {
@@ -84,12 +75,28 @@ public class Trip {
         return tickets;
     }
 
-    public int getPlannedNumberOfPassengers() {
-        return plannedNumberOfPassengers;
+    public int getnTicketsMax() {
+        return nTicketsMax;
     }
 
-    public void setPlannedNumberOfPassengers(int plannedNumberOfPassengers) {
-        this.plannedNumberOfPassengers = plannedNumberOfPassengers;
+    public void setnTicketsMax(short nTicketsMax) {
+        this.nTicketsMax = nTicketsMax;
     }
 
+    public int getnTicketsSold() {
+        return nTicketsSold;
+    }
+
+    public void setnTicketsSold(int nTicketsSold) {
+        if (nTicketsSold < 0) {
+            nTicketsSold = 0;
+        } else if (nTicketsSold > nTicketsMax){
+            return;
+        }
+        this.nTicketsSold = nTicketsSold;
+    }
+
+    public void incrementTicketsSoldBy(int n){
+        setnTicketsSold(getnTicketsSold() + n);
+    }
 }

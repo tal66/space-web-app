@@ -5,10 +5,10 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "news_articles")
-@ToString
 public class NewsArticle {
 
     @Id
@@ -17,46 +17,41 @@ public class NewsArticle {
     private String headline;
     private String text;
 
-
-//    @ElementCollection
-//    @CollectionTable(name = "article_images",
-//            joinColumns = {@JoinColumn(name = "article_id", referencedColumnName = "id")})
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "news_article_images",
             joinColumns = @JoinColumn(name = "news_article_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private List<Image> imageList;
+    private Set<Image> images;
 
     private final LocalDate dateCreated = LocalDate.now();
 
     public NewsArticle() {
     }
 
-    public NewsArticle(String headline, List<Image> imageList, String text) {
+    public NewsArticle(String headline, Set<Image> images, String text) {
         this.headline = headline;
-        this.imageList = imageList;
+        this.images = images;
         this.text = text;
     }
 
     public void addImage(String address, String text){
-        imageList.add(new Image(address, text));
+        images.add(new Image(address, text));
     }
 
     public boolean removeImage(int index){
-        if (index >=0 && index < imageList.size()){
-            imageList.remove(index);
+        if (index >=0 && index < images.size()){
+            images.remove(index);
             return true;
         }
         return false;
     }
 
+    public Set<Image> getImages() {
+        return images;
+    }
 
     public Integer getId() {
         return id;
-    }
-
-    public List<Image> getImageList() {
-        return imageList;
     }
 
     public LocalDate getDateCreated() {

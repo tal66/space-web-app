@@ -28,7 +28,8 @@
         from_dest varchar(255),
         to_dest varchar(255),
         trip_date date,
-        planned_number_of_passengers integer,
+        n_tickets_sold integer,
+        n_tickets_max integer,
         primary key (id),
         foreign key (to_dest) references destinations,
         foreign key (from_dest) references destinations
@@ -59,9 +60,7 @@
         id integer not null AUTO_INCREMENT,
         address varchar(255),
         text varchar(255),
---        article_id int,
         primary key (id)
---        foreign key (article_id) references news_articles(id)
     );
 
     create table news_article_images(

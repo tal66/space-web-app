@@ -1,6 +1,7 @@
 package mt.spacewebapp.services;
 
 import mt.spacewebapp.models.Destination;
+import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.Trip;
 
 import java.time.LocalDate;
@@ -12,5 +13,6 @@ public interface ITripService {
     Optional<Trip> findById(Integer id);
     List<Trip> findByDateBetweenOrderByDate(LocalDate date1, LocalDate date2);
     List<Trip> findByDestinationIfAvailable(Destination destination);
-    int getNumberOfTicketsAvailable(Trip trip);
+    int getNumTicketsAvailable(Trip trip);
+    Ticket saveTicketRequest(Ticket ticket);
 }

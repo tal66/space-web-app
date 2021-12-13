@@ -2,11 +2,11 @@ package mt.spacewebapp.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import mt.spacewebapp.data.TicketRepository;
-import mt.spacewebapp.data.Specs.TicketSpecs;
+import mt.spacewebapp.models.Customer;
 import mt.spacewebapp.models.Ticket;
 import mt.spacewebapp.models.enums.TicketStatus;
 import mt.spacewebapp.services.ITicketService;
-import org.springframework.data.jpa.domain.Specification;
+import mt.spacewebapp.services.ITripService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +17,16 @@ import java.util.UUID;
 @Slf4j
 public class TicketService implements ITicketService {
     private TicketRepository ticketRepository;
+    public ITripService tripService;
 
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(TicketRepository ticketRepository, ITripService tripService) {
         this.ticketRepository = ticketRepository;
+        this.tripService = tripService;
     }
 
     @Override
     public Ticket save(Ticket ticket){
-        return ticketRepository.save(ticket);
+        return tripService.saveTicketRequest(ticket);
     }
 
     @Override
@@ -46,19 +48,9 @@ public class TicketService implements ITicketService {
         }
         Ticket ticket = ticketOptional.get();
         ticket.setStatus(status);
-        save(ticket);
+        tripService.saveTicketRequest(ticket);
         return true;
     }
-
-    private boolean deleteTicketById(String id){
-        try {
-            ticketRepository.deleteById(UUID.fromString(id));
-        } catch (Exception e){
-            return false;
-        }
-        return true;
-    }
-
 
     @Override
     public List<Ticket> findAllOrderByTripId(){
@@ -66,10 +58,8 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public int countByTicketStatusValidAndTripId(Integer id){
-        return (int)ticketRepository.count(Specification
-                .where(TicketSpecs.whereTripId(id))
-                .and(TicketSpecs.whereStatus(TicketStatus.VALID)));
+    public List<Ticket> findByCustomer(Customer customer){
+        return ticketRepository.findByCustomer(customer);
     }
 
     @Override

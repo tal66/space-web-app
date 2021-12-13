@@ -52,8 +52,8 @@ public class TripRestController {
             return new SimpleResponseWrapper("trip not found");
         }
 
-        int numberOfTicketsAvailable = tripService.getNumberOfTicketsAvailable(trip.get());
-        int plannedNumberOfPassengers = trip.get().getPlannedNumberOfPassengers();
+        int numberOfTicketsAvailable = tripService.getNumTicketsAvailable(trip.get());
+        int plannedNumberOfPassengers = trip.get().getnTicketsMax();
         TripStats stats = new TripStats(numberOfTicketsAvailable, plannedNumberOfPassengers);
 
         return new SimpleResponseWrapper(stats);

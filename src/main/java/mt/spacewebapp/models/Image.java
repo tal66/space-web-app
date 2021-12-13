@@ -1,9 +1,14 @@
 package mt.spacewebapp.models;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "images")
+@Getter
+@ToString
 public class Image {
     @GeneratedValue
     @Id
@@ -32,29 +37,12 @@ public class Image {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getText() {
-        return text;
     }
 
     public void setText(String text) {
         this.text = text;
     }
-
-    @Override
-    public String toString() {
-        return "Image{" +
-                "address='" + address + '\'' +
-                ", text='" + text + '\'' +
-                '}';
-    }
-
 
 }
