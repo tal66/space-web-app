@@ -34,7 +34,7 @@ public class Destination {
 
     @Override
     public String toString() {
-        return String.format("Destination[%s, %s]", name, type);
+        return String.format("Destination[%d, %s, %s]", id, name, type);
     }
 
     public Integer getId() {

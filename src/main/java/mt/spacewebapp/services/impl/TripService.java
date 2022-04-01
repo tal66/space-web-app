@@ -63,7 +63,7 @@ public class TripService implements ITripService {
     }
 
     private List<Trip> findByDestination(Destination destination){
-        List<Trip> tripList = tripRepository.findByTo(destination);
+        List<Trip> tripList = tripRepository.findByToId(destination.getId());
         log.info(String.format("All Trips to %s: %d", destination.getName(), tripList.size()));
         return tripList;
     }

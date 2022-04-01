@@ -37,7 +37,7 @@
 
 
     create table tickets (
-        id binary not null,
+        id uuid not null,
         class integer,
         status integer,
         customer_id integer,

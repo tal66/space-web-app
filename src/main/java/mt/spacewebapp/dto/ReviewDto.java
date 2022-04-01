@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class ReviewDto {
-    private Long id;
+    private Integer id;
     private String customerFirstName;
     private int stars;
     private String headline;
