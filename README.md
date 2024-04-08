@@ -1,7 +1,8 @@
-# space-web-app
-### Java Spring Boot space travel agency
+## [Archived repo] 
+### written for the purpose of learning Java and Java Spring (2021)
 
-![Alt demo](SpaceDemo.gif)
+## space-web-app
+### Java Spring Boot space travel agency
 
 features:
 - basic info about planets
